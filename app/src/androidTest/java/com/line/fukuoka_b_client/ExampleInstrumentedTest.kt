@@ -1,4 +1,4 @@
-package com.line.fukuoka.b.client.fukuoka_b_client
+package com.line.fukuoka_b_client
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.line.fukuoka.b.client.fukuoka_b_client", appContext.packageName)
+        assertEquals("com.line.fukuoka_b_client", appContext.packageName)
     }
 }

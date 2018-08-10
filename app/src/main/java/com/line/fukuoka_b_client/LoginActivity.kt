@@ -1,4 +1,4 @@
-package com.line.fukuoka.b.client.fukuoka_b_client
+package com.line.fukuoka_b_client
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

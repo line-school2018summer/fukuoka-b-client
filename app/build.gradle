@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.line.fukuoka.b.client.fukuoka_b_client"
+        applicationId "com.line.fukuoka_b_client"
         minSdkVersion 27
         targetSdkVersion 28
         versionCode 1
