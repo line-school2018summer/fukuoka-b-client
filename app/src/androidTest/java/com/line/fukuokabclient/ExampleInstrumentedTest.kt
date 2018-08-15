@@ -1,4 +1,4 @@
-package com.line.fukuokaBClient
+package com.line.fukuokabclient
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

@@ -1,4 +1,4 @@
-package com.line.fukuokaBClient
+package com.line.fukuokabclient
 
 import org.junit.Test
 
