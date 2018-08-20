@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             Toast.makeText(applicationContext, "Signed in", Toast.LENGTH_LONG).show()
                             mUser = mAuth!!.currentUser
-//                            updateUI(mUser!!)
+                            updateUI(mUser!!)
                         } else {
                             Toast.makeText(applicationContext, "Logged in failed", Toast.LENGTH_LONG).show()
                         }
@@ -40,8 +40,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-//    fun updateUI(mUser:FirebaseUser) {
-//        var intent = Intent(applicationContext, PinActivity::class.java)
-//        startActivity(intent)
-//    }
+    fun updateUI(mUser:FirebaseUser) {
+        var intent = Intent(applicationContext, ChatActivity::class.java)
+        startActivity(intent)
+    }
 }
