@@ -10,6 +10,6 @@ data class MessageDTO (
         var sendAt: Timestamp?
 ) {
     override fun toString(): String {
-        return super.toString()
+        return "{\"senderId\": \"$senderId\", \"roomId\": \"$roomId\", \"text\": \"$text\"}"
     }
 }
