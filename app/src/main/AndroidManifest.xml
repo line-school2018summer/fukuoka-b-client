@@ -24,8 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChatActivity" />
-        <activity android:name=".ChannelListActivity"></activity>
+        <!--アクティビティのサイズがキーボードのサイズ分小さくなる-->
+        <activity android:name=".ChatActivity"
+            android:windowSoftInputMode="adjustResize">
+        <activity android:name=".ChannelListActivity">
+          </activity>　
     </application>
 
 </manifest>

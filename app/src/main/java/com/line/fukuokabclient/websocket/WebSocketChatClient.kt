@@ -1,12 +1,15 @@
 package com.line.fukuokabclient.websocket
 
 import android.app.Activity
+import android.graphics.Color
 import android.util.Log
+import android.view.Gravity
 import android.widget.TextView
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.line.fukuokabclient.dto.MessageDTO
 import org.java_websocket.WebSocket
+import rx.Observable
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.client.StompClient
 
@@ -28,6 +31,16 @@ class WebSocketChatClient (val activity: Activity) {
                     view.append(message.id.toString() + message.content)
                     view.append(breakLine)
                 }
+            }
+        }
+    }
+
+    fun tooic(destination: String) :Observable<MessageDTO> {
+        val mapper = jacksonObjectMapper()
+        return stompClient.topic(destination).map { topicMessage ->
+            run {
+                Log.d("hogehoge", "${topicMessage.payload}")
+                mapper.readValue<MessageDTO>(topicMessage.payload)
             }
         }
     }
