@@ -25,7 +25,7 @@ class WebSocketChatClient (val activity: Activity) {
                 val mapper = jacksonObjectMapper()
                 val message = mapper.readValue<MessageDTO>(topicMessage.payload)
                 activity.runOnUiThread {
-                    view.append(message.text)
+                    view.append(message.id.toString() + message.content)
                     view.append(breakLine)
                 }
             }
