@@ -28,15 +28,8 @@ class WebSocketChatClient (val activity: Activity) {
                 val mapper = jacksonObjectMapper()
                 val message = mapper.readValue<MessageDTO>(topicMessage.payload)
                 activity.runOnUiThread {
-                    if (message.senderId.toString() == "9999") {
-                        view.append("9999: " + message.text)
-                        view.append(breakLine)
-                        view.setTextColor(Color.parseColor("#00B900"))
-                        view.gravity = Gravity.RIGHT
-                    } else {
-                        view.setTextColor(Color.parseColor("#ffffff"))
-                        view.gravity = Gravity.LEFT
-                    }
+                    view.append(message.id.toString() + message.content)
+                    view.append(breakLine)
                 }
             }
         }

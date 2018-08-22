@@ -5,11 +5,11 @@ import java.sql.Timestamp
 data class MessageDTO (
         var id: Long?,
         var senderId: Long,
-        var roomId: Long,
-        var text: String,
-        var sendAt: Timestamp?
+        var channelId: Long,
+        var content: String,
+        var createdAt: Timestamp?
 ) {
     override fun toString(): String {
-        return "{\"senderId\": \"$senderId\", \"roomId\": \"$roomId\", \"text\": \"$text\"}"
+        return "{\"senderId\": \"$senderId\", \"channelId\": \"$channelId\", \"content\": \"$content\"}"
     }
 }

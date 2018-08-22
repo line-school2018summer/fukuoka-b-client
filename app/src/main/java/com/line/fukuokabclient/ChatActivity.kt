@@ -15,12 +15,13 @@ class ChatActivity : AppCompatActivity() {
     private var client = WebSocketChatClient(this)
     var mAuth: FirebaseAuth? = null
     var email:String = ""
+    var channelId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         mAuth = FirebaseAuth.getInstance()
-
+        //channelId = intent.getLongExtra("channelId", 0)
     }
 
     override fun onStart() {
@@ -33,6 +34,8 @@ class ChatActivity : AppCompatActivity() {
 
         btnConnect.setOnClickListener {
             client.connect()
+
+//             client.topic("/topic/chat.$channelId", messageList)
 //            client.topic("/topic/chat.123", messageList)
             start()
             client.lifecycle()
