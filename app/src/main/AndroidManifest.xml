@@ -26,7 +26,7 @@
         </activity>
         <!--アクティビティのサイズがキーボードのサイズ分小さくなる-->
         <activity android:name=".ChatActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name=".ChannelListActivity">
           </activity>　
     </application>

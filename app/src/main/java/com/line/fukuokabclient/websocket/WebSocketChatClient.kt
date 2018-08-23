@@ -35,10 +35,10 @@ class WebSocketChatClient (val activity: Activity) {
         }
     }
 
-    fun tooic(destination: String) :Observable<MessageDTO> {
-        val mapper = jacksonObjectMapper()
+    fun topic(destination: String) :Observable<MessageDTO> {
         return stompClient.topic(destination).map { topicMessage ->
             run {
+                val mapper = jacksonObjectMapper()
                 Log.d("hogehoge", "${topicMessage.payload}")
                 mapper.readValue<MessageDTO>(topicMessage.payload)
             }

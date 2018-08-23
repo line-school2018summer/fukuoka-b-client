@@ -46,6 +46,7 @@ class ChatActivity : AppCompatActivity() {
 
         btnDisconnect.setOnClickListener {
             client.disconnect()
+            client = WebSocketChatClient(this)
             btnConnect.isEnabled = true
             btnDisconnect.isEnabled = false
         }
@@ -66,12 +67,12 @@ class ChatActivity : AppCompatActivity() {
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items)
         messageList.adapter = adapter
 
-        client.tooic("/topic/chat.123")
+        client.topic("/topic/chat.123")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Log.d("hogehoge", "${items.size}")
-                    items.add(it.text)
+                    items.add(it.content)
                     adapter.notifyDataSetChanged()
                 }, {
                     Log.e("hogehoge", "error", it)
