@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.line.fukuokabclient.R
+import com.line.fukuokabclient.dto.MessageDTO
 import kotlinx.android.synthetic.main.recyclerview_chat.view.*
 
-class ChatAdapter(private val messages: ArrayList<String>): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
+class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
     class ViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         var messageText: TextView = view.my_message
@@ -18,16 +19,28 @@ class ChatAdapter(private val messages: ArrayList<String>): RecyclerView.Adapter
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val textView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.recyclerview_chat, parent, false) as View
+    override fun getItemViewType(position: Int): Int {
+        if (messages[position].senderId == senderId) return 1
+        else return 2
+    }
 
-        return ViewHolder(textView)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        var textView:View? = null
+        when (viewType) {
+            1 ->  textView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat, parent, false)
+            2 -> textView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat2, parent, false)
+        }
+
+        textView.background
+
+
+        return ViewHolder(textView!!)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val message = messages.get(position)
-        holder.bind(message)
+        holder.bind(message.content)
         //holder.view.text = messages[position]
     }
 
