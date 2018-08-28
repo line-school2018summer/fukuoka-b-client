@@ -2,9 +2,10 @@ package com.line.fukuokabclient
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.widget.ArrayAdapter
 import com.google.firebase.auth.FirebaseAuth
+import com.line.fukuokabclient.Adapter.ChatAdapter
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.websocket.WebSocketChatClient
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -63,9 +64,11 @@ class ChatActivity : AppCompatActivity() {
     }
 
     fun start() {
-        val items = mutableListOf<String>()
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items)
-        messageList.adapter = adapter
+        var items = ArrayList<String>()
+        val messageAdapter = ChatAdapter(items)
+        chat_recycler_view.layoutManager = LinearLayoutManager(this)
+        chat_recycler_view.adapter = messageAdapter
+
 
         client.topic("/topic/chat.123")
                 .subscribeOn(Schedulers.io())
@@ -73,16 +76,13 @@ class ChatActivity : AppCompatActivity() {
                 .subscribe({
                     Log.d("hogehoge", "${items.size}")
                     items.add(it.content)
-                    adapter.notifyDataSetChanged()
+                    messageAdapter.notifyDataSetChanged()
                 }, {
                     Log.e("hogehoge", "error", it)
                 }, {
                     Log.d("hogehoge", "completed")
                 })
     }
-
-
-
 
 
 
