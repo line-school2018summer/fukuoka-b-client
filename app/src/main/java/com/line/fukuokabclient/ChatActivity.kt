@@ -55,8 +55,8 @@ class ChatActivity : AppCompatActivity() {
 
         btnSendMessage.setOnClickListener {
             if (editSendMessage.text.toString().isNotEmpty()) {
-                val message = MessageDTO(null, senderId,channelId, editSendMessage.text.toString(), null)
-                client.send("/app/chat.123", message.toString())
+                val message = MessageDTO(null, senderId, channelId, editSendMessage.text.toString(), null)
+                client.send("/app/chat.$channelId", message.toString())
 
                 // メッセージ送信後は入力欄を空欄にする
                 editSendMessage.setText("")
@@ -71,7 +71,7 @@ class ChatActivity : AppCompatActivity() {
         chat_recycler_view.adapter = messageAdapter
 
 
-        client.topic("/topic/chat.123")
+        client.topic("/topic/chat.$channelId")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
