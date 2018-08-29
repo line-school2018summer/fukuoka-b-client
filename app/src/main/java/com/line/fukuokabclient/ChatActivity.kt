@@ -24,6 +24,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
         mAuth = FirebaseAuth.getInstance()
         //channelId = intent.getLongExtra("channelId", 0)
+        senderId = intent.getLongExtra("id", 0)
     }
 
     override fun onStart() {

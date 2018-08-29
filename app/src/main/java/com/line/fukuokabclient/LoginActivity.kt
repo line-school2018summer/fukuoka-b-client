@@ -6,7 +6,14 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.gson.GsonBuilder
+import com.line.fukuokabclient.client.UserClient
 import kotlinx.android.synthetic.main.activity_login.*
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 /**
  * A login screen that offers login via email/password.
@@ -41,7 +48,27 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun updateUI(mUser:FirebaseUser) {
-        var intent = Intent(applicationContext, ChatActivity::class.java)
-        startActivity(intent)
+        val gson = GsonBuilder()
+                .create()
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl("http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build()
+
+        val userClient = retrofit.create(UserClient::class.java)
+
+        userClient.getUserByMail(mUser.email!!)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    var intent = Intent(applicationContext, ChatActivity::class.java)
+                    intent.putExtra("id", it.id)
+                    startActivity(intent)
+                }, {
+
+                })
+
     }
 }
