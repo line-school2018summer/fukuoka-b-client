@@ -11,4 +11,7 @@ interface UserClient {
 
     @GET("/user/id/{mail}")
     fun getUserByMail(@Path("mail") mail: String): Observable<UserDTO>
+
+    @GET("/user/userId/{userId}")
+    fun getUserByUserId(@Path("userId") userId: String): Observable<UserDTO>
 }
