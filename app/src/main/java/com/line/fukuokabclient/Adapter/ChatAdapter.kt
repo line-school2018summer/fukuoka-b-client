@@ -32,9 +32,6 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
             2 -> textView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat2, parent, false)
         }
 
-        textView.background
-
-
         return ViewHolder(textView!!)
     }
 
