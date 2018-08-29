@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
                 .create()
 
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com")
+                .baseUrl(BuildConfig.BASEURL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    var intent = Intent(applicationContext, ChatActivity::class.java)
+                    var intent = Intent(applicationContext, SearchActivity::class.java)
                     intent.putExtra("id", it.id)
                     startActivity(intent)
                 }, {
