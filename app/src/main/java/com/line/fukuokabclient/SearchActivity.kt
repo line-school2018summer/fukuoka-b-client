@@ -27,11 +27,10 @@ class SearchActivity : AppCompatActivity() {
 
         Log.d("CREATE!", "CREATE!")
         val gson = GsonBuilder()
-//                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create()
 
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://172.16.0.31:8080")
+                .baseUrl("http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()

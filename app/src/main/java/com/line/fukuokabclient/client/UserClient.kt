@@ -14,5 +14,4 @@ interface UserClient {
 
     @GET("/user/userId/{userId}")
     fun getUserByUserId(@Path("userId") userId: String): Observable<UserDTO>
-
 }

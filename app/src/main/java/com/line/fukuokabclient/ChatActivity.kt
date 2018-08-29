@@ -16,13 +16,15 @@ class ChatActivity : AppCompatActivity() {
     private var client = WebSocketChatClient(this)
     var mAuth: FirebaseAuth? = null
     var email:String = ""
-    var channelId: Long = 0
+    var channelId: Long = 123
+    var senderId:Long = 9999
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         mAuth = FirebaseAuth.getInstance()
-        //channelId = intent.getLongExtra("channelId", 0)
+        channelId = intent.getLongExtra("channelId", 0)
+        senderId = intent.getLongExtra("id", 0)
     }
 
     override fun onStart() {
@@ -54,8 +56,8 @@ class ChatActivity : AppCompatActivity() {
 
         btnSendMessage.setOnClickListener {
             if (editSendMessage.text.toString().isNotEmpty()) {
-                val message = MessageDTO(null, 9999,123, editSendMessage.text.toString(), null)
-                client.send("/app/chat.123", message.toString())
+                val message = MessageDTO(null, senderId, channelId, editSendMessage.text.toString(), null)
+                client.send("/app/chat.$channelId", message.toString())
 
                 // メッセージ送信後は入力欄を空欄にする
                 editSendMessage.setText("")
@@ -64,18 +66,18 @@ class ChatActivity : AppCompatActivity() {
     }
 
     fun start() {
-        var items = ArrayList<String>()
-        val messageAdapter = ChatAdapter(items)
+        var items = ArrayList<MessageDTO>()
+        val messageAdapter = ChatAdapter(items, senderId)
         chat_recycler_view.layoutManager = LinearLayoutManager(this)
         chat_recycler_view.adapter = messageAdapter
 
 
-        client.topic("/topic/chat.123")
+        client.topic("/topic/chat.$channelId")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Log.d("hogehoge", "${items.size}")
-                    items.add(it.content)
+                    items.add(it)
                     messageAdapter.notifyDataSetChanged()
                 }, {
                     Log.e("hogehoge", "error", it)
