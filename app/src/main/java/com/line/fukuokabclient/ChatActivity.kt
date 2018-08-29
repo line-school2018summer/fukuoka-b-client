@@ -66,8 +66,6 @@ class ChatActivity : AppCompatActivity() {
 
                 // メッセージ送信後は入力欄を空欄にする
                 editSendMessage.setText("")
-
-                chat_recycler_view.scrollToPosition(messageAdapter!!.itemCount-1)
             }
         }
     }
@@ -84,6 +82,7 @@ class ChatActivity : AppCompatActivity() {
                     Log.d("hogehoge", "${items.size}")
                     items.add(it)
                     messageAdapter!!.notifyDataSetChanged()
+                    chat_recycler_view.scrollToPosition(messageAdapter!!.itemCount-1)
                 }, {
                     Log.e("hogehoge", "error", it)
                 }, {
