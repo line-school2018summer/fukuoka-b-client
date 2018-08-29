@@ -51,7 +51,7 @@ class SearchActivity : AppCompatActivity() {
 //
             // getUserFromId
 //
-//            userClient.API(Integer.parseInt(searchIdView.text.toString()))
+//            userClient.getUserById(Integer.parseInt(searchIdView.text.toString()))
 //                    .enqueue(object : Callback<UserDTO> {
 //                        override fun onFailure(call: Call<UserDTO>, t: Throwable?) {
 //                            Log.d("result", "failure" + t.toString())
