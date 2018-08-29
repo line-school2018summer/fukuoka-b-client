@@ -18,6 +18,9 @@ class ChatActivity : AppCompatActivity() {
     var email:String = ""
     var channelId: Long = 123
     var senderId:Long = 9999
+    var items = ArrayList<MessageDTO>()
+    var messageAdapter: ChatAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,8 @@ class ChatActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         channelId = intent.getLongExtra("channelId", 0)
         senderId = intent.getLongExtra("id", 0)
+        messageAdapter = ChatAdapter(items, senderId)
+
     }
 
     override fun onStart() {
@@ -61,15 +66,15 @@ class ChatActivity : AppCompatActivity() {
 
                 // メッセージ送信後は入力欄を空欄にする
                 editSendMessage.setText("")
+
+                chat_recycler_view.scrollToPosition(messageAdapter!!.itemCount-1)
             }
         }
     }
 
     fun start() {
-        var items = ArrayList<MessageDTO>()
-        val messageAdapter = ChatAdapter(items, senderId)
         chat_recycler_view.layoutManager = LinearLayoutManager(this)
-        chat_recycler_view.adapter = messageAdapter
+        chat_recycler_view.adapter = messageAdapter!!
 
 
         client.topic("/topic/chat.$channelId")
@@ -78,7 +83,7 @@ class ChatActivity : AppCompatActivity() {
                 .subscribe({
                     Log.d("hogehoge", "${items.size}")
                     items.add(it)
-                    messageAdapter.notifyDataSetChanged()
+                    messageAdapter!!.notifyDataSetChanged()
                 }, {
                     Log.e("hogehoge", "error", it)
                 }, {
