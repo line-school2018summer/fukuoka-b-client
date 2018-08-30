@@ -5,6 +5,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.client.UserClient
 import com.line.fukuokabclient.dto.UserDTO
@@ -28,8 +29,8 @@ class SearchActivity : AppCompatActivity() {
                 .create()
 
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://172.16.0.31:8080")
-//                .baseUrl("http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com")
+//                .baseUrl("http://192.168.0.14:8080")
+                .baseUrl("http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
@@ -81,6 +82,7 @@ class SearchActivity : AppCompatActivity() {
                                 .setMessage(it.toString()).show()
                         addFriendButton.visibility = View.VISIBLE
                         val friendId = it.id
+                        val friendName = it.name
                         addFriendButton.setOnClickListener {
                             val body = HashMap<String, Long>()
                             body.put("userId", id)
@@ -91,6 +93,7 @@ class SearchActivity : AppCompatActivity() {
                                     .subscribe({
                                         Log.d("ADD", "ADDED!")
                                         addFriendButton.visibility = View.INVISIBLE
+                                        Toast.makeText(applicationContext, "\"${friendName}\" was added successfully!", Toast.LENGTH_LONG).show()
                                     }, {
                                         Log.d("ADD", "FAILED!${it.message}")
                                     })
