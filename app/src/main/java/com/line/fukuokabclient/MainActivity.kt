@@ -71,9 +71,9 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
         setContentView(R.layout.activity_main)
 
         userId = intent.getLongExtra("id", 0)
-        initChannelsList()
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        switchFragment(FriendsFragment.newInstance(1))
     }
 
     private fun switchFragment(fragment: Fragment) {
@@ -81,9 +81,5 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
         transaction.replace(main_frame.id, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
-    }
-
-    private fun initChannelsList() {
-
     }
 }
