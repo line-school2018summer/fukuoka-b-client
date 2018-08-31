@@ -1,4 +1,4 @@
-package com.line.fukuokabclient
+package com.line.fukuokabclient.Fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -10,9 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.line.fukuokabclient.Adapter.FriendsRecyclerViewAdapter
+import com.line.fukuokabclient.R
+import com.line.fukuokabclient.dto.UserDTO
 
 import com.line.fukuokabclient.dummy.DummyContent
-import com.line.fukuokabclient.dummy.DummyContent.DummyItem
 
 /**
  * A fragment representing a list of Items.
@@ -21,7 +22,6 @@ import com.line.fukuokabclient.dummy.DummyContent.DummyItem
  */
 class FriendsFragment : Fragment() {
 
-    // TODO: Customize parameters
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null
@@ -78,7 +78,7 @@ class FriendsFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
+        fun onFriendFragmentInteraction(item: UserDTO?)
     }
 
     companion object {

@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 
-import com.line.fukuokabclient.FriendsFragment.OnListFragmentInteractionListener
+import com.line.fukuokabclient.Fragments.FriendsFragment.OnListFragmentInteractionListener
 import com.line.fukuokabclient.R
-import com.line.fukuokabclient.dummy.DummyContent.DummyItem
+import com.line.fukuokabclient.dto.UserDTO
 
 import kotlinx.android.synthetic.main.fragment_friends.view.*
 
@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_friends.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class FriendsRecyclerViewAdapter(
-        private val mValues: List<DummyItem>,
+        private val mValues: List<UserDTO>,
         private val mListener: OnListFragmentInteractionListener?)
     : RecyclerView.Adapter<FriendsRecyclerViewAdapter.ViewHolder>() {
 
@@ -27,10 +27,10 @@ class FriendsRecyclerViewAdapter(
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
+            val item = v.tag as UserDTO
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
-            mListener?.onListFragmentInteraction(item)
+            mListener?.onFriendFragmentInteraction(item)
         }
     }
 
@@ -42,8 +42,8 @@ class FriendsRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.id
-        holder.mContentView.text = item.content
+        holder.mIdView.text = item.id.toString()
+        holder.mContentView.text = item.name
 
         with(holder.mView) {
             tag = item

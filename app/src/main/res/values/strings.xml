@@ -14,7 +14,7 @@
         completions."
     </string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_friends">友だち</string>
+    <string name="title_channels">チャンネル</string>
+    <string name="title_settings">設定</string>
 </resources>
