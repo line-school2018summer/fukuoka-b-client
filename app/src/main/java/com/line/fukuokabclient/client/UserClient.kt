@@ -6,7 +6,7 @@ import rx.Observable
 
 interface UserClient {
     @GET("/user/{id}")
-    fun API(@Path("id") id: Int): Call<UserDTO>
+    fun getUserById(@Path("id") id: Int): Call<UserDTO>
 
     @GET("/user/id/{mail}")
     fun getUserByMail(@Path("mail") mail: String): Observable<UserDTO>
