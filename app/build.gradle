@@ -15,10 +15,30 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField "String", "BASEURL", "\"http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com\""
+            buildConfigField "String", "WSURL", "\"ws://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com/chat\""
+        }
+
+        debug_server {
+            debuggable true
+            jniDebuggable false
+            renderscriptDebuggable false
+            minifyEnabled false
+            zipAlignEnabled true
+
+            buildConfigField "String", "BASEURL", "\"http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com\""
+            buildConfigField "String", "WSURL", "\"ws://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com/chat\""
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "BASEURL", "\"http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com\""
+            buildConfigField "String", "WSURL", "\"ws://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com/chat\""
         }
+
     }
     productFlavors {
     }
