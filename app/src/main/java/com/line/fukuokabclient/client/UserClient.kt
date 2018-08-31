@@ -17,5 +17,5 @@ interface UserClient {
     @Headers("Accept: application/json",
             "Content-type: application/json")
     @POST("/user/friend/add")
-    fun addFriend(@Body body: HashMap<String, Long>): Observable<PostAddFriends>
+    fun addFriend(@Body body: HashMap<String, Long>): Observable<Void>
 }

@@ -54,12 +54,13 @@ class SearchActivity : AppCompatActivity() {
                         AlertDialog.Builder(this@SearchActivity)
                                 .setTitle("My Data")
                                 .setMessage(it.toString()).show()
+
                         addFriendButton.visibility = View.VISIBLE
                         val friendId = it.id
                         addFriendButton.setOnClickListener {
                             val body = HashMap<String, Long>()
-                            body.put("userId", id)
-                            body.put("friendId", friendId)
+                            body["userId"] = id
+                            body["friendId"] = friendId
                             userClient.addFriend(body)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
