@@ -1,6 +1,5 @@
 package com.line.fukuokabclient.Adapter
 
-import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.line.fukuokabclient.*
 import com.line.fukuokabclient.dto.ChannelDTO
-import kotlinx.android.synthetic.main.recyclerview_channel.view.*
+import kotlinx.android.synthetic.main.fragment_channels.view.*
 
 class ChannelsAdapter(private val channels: List<ChannelDTO>, val id: Long): RecyclerView.Adapter<ChannelsAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_channel, parent, false)
+        val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.fragment_channels, parent, false)
         return ViewHolder(inflatedView, id)
     }
 
@@ -26,12 +25,12 @@ class ChannelsAdapter(private val channels: List<ChannelDTO>, val id: Long): Rec
     class ViewHolder(itemView: View, val id: Long): RecyclerView.ViewHolder(itemView) {
         fun bind(channel: ChannelDTO) {
             itemView.txt_channel_name.text = channel.name
-            itemView.btn_enter_channel.setOnClickListener {
-                var intent = Intent(itemView.context, ChatActivity::class.java)
-                intent.putExtra("id", id)
-                intent.putExtra("channelId", channel.id)
-                itemView.context.startActivity(intent)
-            }
+//            itemView.btn_enter_channel.setOnClickListener {
+//                var intent = Intent(itemView.context, ChatActivity::class.java)
+//                intent.putExtra("id", id)
+//                intent.putExtra("channelId", channel.id)
+//                itemView.context.startActivity(intent)
+//            }
         }
     }
 }
