@@ -23,6 +23,7 @@ import com.line.fukuokabclient.dummy.DummyContent
 class FriendsFragment : Fragment() {
 
     private var columnCount = 1
+    private var items = emptyList<UserDTO>()
 
     private var listener: OnListFragmentInteractionListener? = null
 
@@ -31,6 +32,8 @@ class FriendsFragment : Fragment() {
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
+            val item_array = it.getParcelableArray(ARG_ITEMS)
+            items = item_array.toList() as List<UserDTO>
         }
     }
 
@@ -45,7 +48,7 @@ class FriendsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = FriendsRecyclerViewAdapter(DummyContent.ITEMS, listener)
+                adapter = FriendsRecyclerViewAdapter(items, listener)
             }
         }
         return view
@@ -77,21 +80,21 @@ class FriendsFragment : Fragment() {
      * for more information.
      */
     interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFriendFragmentInteraction(item: UserDTO?)
     }
 
     companion object {
 
-        // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
+        const val ARG_ITEMS = "items"
 
         // TODO: Customize parameter initialization
         @JvmStatic
-        fun newInstance(columnCount: Int) =
+        fun newInstance(columnCount: Int, items: List<UserDTO>) =
                 FriendsFragment().apply {
                     arguments = Bundle().apply {
                         putInt(ARG_COLUMN_COUNT, columnCount)
+                        putParcelableArray(ARG_ITEMS, items.toTypedArray())
                     }
                 }
     }

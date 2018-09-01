@@ -18,4 +18,7 @@ interface UserClient {
             "Content-type: application/json")
     @POST("/user/friend/add")
     fun addFriend(@Body body: HashMap<String, Long>): Observable<Void>
+
+    @GET("/user/{id}/friends")
+    fun getFriends(@Path("id") id: Long): Observable<List<UserDTO>>
 }
