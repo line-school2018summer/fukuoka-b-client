@@ -22,15 +22,16 @@
         android:id="@+id/other_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/opponent_message_balloon"
         android:elevation="5dp"
-        android:padding="15dp"
         android:maxWidth="240dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="10dp"
+        android:padding="15dp"
         android:textColor="#000000"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/other_user_name"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/other_message_time"
