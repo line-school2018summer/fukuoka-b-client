@@ -40,7 +40,7 @@
         android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/other_message"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/other_message" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,13 +1,13 @@
 package com.line.fukuokabclient.Adapter
 
 import android.support.v7.widget.RecyclerView
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.MessageDTO
+import com.line.fukuokabclient.DateUtils
 import kotlinx.android.synthetic.main.recyclerview_chat.view.*
 import kotlinx.android.synthetic.main.recyclerview_chat2.view.*
 
@@ -46,7 +46,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
 
         override fun bind(message: MessageDTO) {
             messageText.text = message.content
-            timeText.text = message.createdAt.toString()
+            timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
         }
     }
 
@@ -57,7 +57,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
 
         override fun bind(message: MessageDTO) {
             messageText.text = message.content
-            timeText.text = message.createdAt.toString()
+            timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
             nameText.text = message.senderId.toString()
         }
     }
