@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Fragments.ChannelsFragment
@@ -83,15 +84,22 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
 
         userId = intent.getLongExtra("id", 0)
 
+        setSupportActionBar(my_toolbar)
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         userClient.getFriends(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    switchFragment(FriendsFragment.newInstance(1, it))
+                    switchFragment(FriendsFragment.newInstance(1, DummyContent.ITEMS))
                 }, {
 
                 })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_friends_toolbar, menu)
+        return true
     }
 
     private fun switchFragment(fragment: Fragment) {
