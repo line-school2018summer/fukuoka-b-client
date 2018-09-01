@@ -13,4 +13,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_friends">友だち</string>
+    <string name="title_channels">チャンネル</string>
+    <string name="title_settings">設定</string>
 </resources>

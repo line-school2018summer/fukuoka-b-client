@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    var intent = Intent(applicationContext, SearchActivity::class.java)
+                    var intent = Intent(applicationContext, MainActivity::class.java)
                     intent.putExtra("id", it.id)
                     startActivity(intent)
                 }, {
