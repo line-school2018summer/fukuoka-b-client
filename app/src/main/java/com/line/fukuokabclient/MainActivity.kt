@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Fragments.ChannelsFragment
@@ -107,5 +108,19 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
         transaction.replace(main_frame.id, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            R.id.toolbar_add_friend -> {
+                var intent = Intent(applicationContext, SearchActivity::class.java)
+                intent.putExtra("id", userId)
+                startActivity(intent)
+                return true
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
     }
 }
