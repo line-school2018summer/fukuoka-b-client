@@ -84,7 +84,14 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
         userId = intent.getLongExtra("id", 0)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        switchFragment(FriendsFragment.newInstance(1, DummyContent.ITEMS))
+        userClient.getFriends(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    switchFragment(FriendsFragment.newInstance(1, it))
+                }, {
+
+                })
     }
 
     private fun switchFragment(fragment: Fragment) {
