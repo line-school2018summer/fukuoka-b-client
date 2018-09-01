@@ -24,26 +24,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- アクティビティのサイズがキーボードのサイズ分小さくなる -->
+
         <activity
             android:name=".ChatActivity"
             android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".SearchActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:windowSoftInputMode="adjustResize"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ChannelListActivity"></activity>
-        　
+        <activity
+            android:name=".ChannelListActivity"/>
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"></activity>
+            android:label="@string/title_activity_main"/>
+
     </application>
 
 </manifest>
