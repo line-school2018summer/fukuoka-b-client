@@ -11,6 +11,7 @@
 
     </style>
     <style name="CustomActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:textColorPrimary">@color/white</item>
         <item name="android:background">@drawable/actionbar_background</item>
         <item name="background">@drawable/actionbar_background</item>
         <item name="titleTextStyle">@style/titleTextStyle</item>

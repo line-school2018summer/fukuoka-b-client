@@ -21,6 +21,8 @@ class WebSocketChatClient (val activity: Activity) {
 
     fun connect() = stompClient.connect()
 
+    fun isConnected() = stompClient.isConnected
+
     fun topic(destination: String, view: TextView) {
         stompClient.topic(destination).subscribe { topicMessage ->
             run {

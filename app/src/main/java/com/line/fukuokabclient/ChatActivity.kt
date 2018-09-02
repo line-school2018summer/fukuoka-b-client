@@ -22,9 +22,23 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+
+        setSupportActionBar(chat_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         mAuth = FirebaseAuth.getInstance()
         channelId = intent.getLongExtra("channelId", 0)
         senderId = intent.getLongExtra("id", 0)
+
+        btnSendMessage.setOnClickListener {
+            if (client.isConnected() && editSendMessage.text.toString().isNotEmpty() ) {
+                val message = MessageDTO(null, senderId, channelId, editSendMessage.text.toString(), null)
+                client.send("/app/chat.$channelId", message.toString())
+
+                // メッセージ送信後は入力欄を空欄にする
+                editSendMessage.setText("")
+            }
+        }
     }
 
     override fun onStart() {
@@ -35,34 +49,15 @@ class ChatActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        btnConnect.setOnClickListener {
-            client.connect()
+        client.connect()
+        start()
+        client.lifecycle()
+    }
 
-//             client.topic("/topic/chat.$channelId", messageList)
-//            client.topic("/topic/chat.123", messageList)
-            start()
-            client.lifecycle()
-
-            it.isEnabled = false
-            btnDisconnect.isEnabled = true
-        }
-
-        btnDisconnect.setOnClickListener {
-            client.disconnect()
-            client = WebSocketChatClient(this)
-            btnConnect.isEnabled = true
-            btnDisconnect.isEnabled = false
-        }
-
-        btnSendMessage.setOnClickListener {
-            if (editSendMessage.text.toString().isNotEmpty()) {
-                val message = MessageDTO(null, senderId, channelId, editSendMessage.text.toString(), null)
-                client.send("/app/chat.$channelId", message.toString())
-
-                // メッセージ送信後は入力欄を空欄にする
-                editSendMessage.setText("")
-            }
-        }
+    override fun onPause() {
+        super.onPause()
+        client.disconnect()
+        client = WebSocketChatClient(this)
     }
 
     fun start() {

@@ -27,7 +27,8 @@
         <!-- アクティビティのサイズがキーボードのサイズ分小さくなる -->
         <activity
             android:name=".ChatActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".SearchActivity"
             android:label="@string/app_name"

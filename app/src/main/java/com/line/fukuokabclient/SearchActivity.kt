@@ -31,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        setSupportActionBar(my_toolbar)
+        setSupportActionBar(search_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val id = intent.getLongExtra("id", 0)
