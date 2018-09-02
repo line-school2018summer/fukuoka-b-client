@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_home -> {
+            R.id.navigation_friends -> {
                 userClient.getFriends(userId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
 
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_channels -> {
                 channelClient.getPublucChannel()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                         })
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
+            R.id.navigation_settings -> {
 
                 return@OnNavigationItemSelectedListener true
             }
