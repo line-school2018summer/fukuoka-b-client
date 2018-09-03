@@ -1,4 +1,4 @@
-package com.line.fukuokabclient
+package com.line.fukuokabclient.Utility
 
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
