@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.MessageDTO
-import com.line.fukuokabclient.DateUtils
+import com.line.fukuokabclient.Utility.DateUtils
 import kotlinx.android.synthetic.main.recyclerview_chat.view.*
 import kotlinx.android.synthetic.main.recyclerview_chat2.view.*
 

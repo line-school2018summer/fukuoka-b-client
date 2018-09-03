@@ -17,6 +17,7 @@ import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.client.ChannelClient
 import com.line.fukuokabclient.client.UserClient
 import com.line.fukuokabclient.dto.ChannelDTO
+import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.dto.UserDTO
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
@@ -42,9 +43,21 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-//                    Toast.makeText(applicationContext, "${item!!.name}", Toast.LENGTH_LONG).show()
-                    var intent = Intent(applicationContext, ChatActivity::class.java)
-                    intent.putExtra("channelId", it.id)
+                    val channelId = it.id!!
+
+                    channelClient.getMessages(channelId)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                val intent = Intent(applicationContext, ChatActivity::class.java).apply {
+                                    putExtra("channelId", channelId)
+                                    putExtra("messages", it.toTypedArray())
+                                }
+                                startActivity(intent)
+                            }, {
+
+                            })
+
                     startActivity(intent)
                 }, {
 

@@ -57,6 +57,9 @@ class ChatActivity : AppCompatActivity() {
                 editSendMessage.setText("")
             }
         }
+
+        if (intent.getParcelableArrayExtra("messages") != null) items = ArrayList(intent.getParcelableArrayExtra("messages").toList()) as ArrayList<MessageDTO>
+
         messageAdapter = ChatAdapter(items, senderId)
     }
 
@@ -83,6 +86,7 @@ class ChatActivity : AppCompatActivity() {
         chat_recycler_view.layoutManager = LinearLayoutManager(this)
         chat_recycler_view.adapter = messageAdapter!!
 
+        if (messageAdapter!!.itemCount > 0) chat_recycler_view.scrollToPosition(messageAdapter!!.itemCount - 1)
 
         client.topic("/topic/chat.$channelId")
                 .subscribeOn(Schedulers.io())
