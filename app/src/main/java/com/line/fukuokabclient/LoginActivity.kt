@@ -32,10 +32,16 @@ class LoginActivity : AppCompatActivity() {
 
         //user = User(id = 1, clientNumber = "PT445")
 
+        checkLoggedIn()
+
         btn_login.setOnClickListener {
             mAuth!!.signInWithEmailAndPassword(txt_email.text.toString(), txt_password.text.toString())
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            Prefs.edit(applicationContext)
+                                    .putString("email", txt_email.text.toString())
+                                    .putString("password", txt_password.text.toString())
+                                    .apply()
                             Toast.makeText(applicationContext, "Signed in", Toast.LENGTH_LONG).show()
                             mUser = mAuth!!.currentUser
                             updateUI(mUser!!)
@@ -65,8 +71,7 @@ class LoginActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    Prefs.get(applicationContext)
-                            .edit()
+                    Prefs.edit(applicationContext)
                             .putLong("id", it.id)
                             .apply()
 
@@ -76,5 +81,10 @@ class LoginActivity : AppCompatActivity() {
 
                 })
 
+    }
+
+    fun checkLoggedIn() {
+        txt_email.setText(Prefs.get(applicationContext).getString("email", ""))
+        txt_password.setText(Prefs.get(applicationContext).getString("password", ""))
     }
 }
