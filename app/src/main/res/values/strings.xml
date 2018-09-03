@@ -13,6 +13,9 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string name="preference_name">com.line.fukuokabclient.PREFERENCE</string>
+
     <string name="title_activity_main">ようこそLlNEへ</string>
     <string name="title_friends">友だち</string>
     <string name="title_channels">チャンネル</string>

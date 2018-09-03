@@ -1,21 +1,23 @@
 package com.line.fukuokabclient
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Fragments.ChannelsFragment
 import com.line.fukuokabclient.Fragments.FriendsFragment
+import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.client.ChannelClient
 import com.line.fukuokabclient.client.UserClient
 import com.line.fukuokabclient.dto.ChannelDTO
 import com.line.fukuokabclient.dto.UserDTO
-import com.line.fukuokabclient.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
@@ -36,12 +38,21 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
     val userClient = retrofit.create(UserClient::class.java)
 
     override fun onFriendFragmentInteraction(item: UserDTO?) {
-        Toast.makeText(applicationContext, "${item!!.name}", Toast.LENGTH_LONG).show()
+        channelClient.getPersonalChannel(userId, item!!.id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+//                    Toast.makeText(applicationContext, "${item!!.name}", Toast.LENGTH_LONG).show()
+                    var intent = Intent(applicationContext, ChatActivity::class.java)
+                    intent.putExtra("channelId", it.id)
+                    startActivity(intent)
+                }, {
+
+                })
     }
 
     override fun onChannelsFragmentInteraction(item: ChannelDTO?) {
         var intent = Intent(applicationContext, ChatActivity::class.java)
-        intent.putExtra("id", userId)
         intent.putExtra("channelId", item!!.id)
         startActivity(intent)
     }
@@ -61,7 +72,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_channels -> {
-                channelClient.getPublucChannel()
+                channelClient.getPublicChannel()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -83,16 +94,16 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        userId = intent.getLongExtra("id", 0)
+        userId = Prefs.get(applicationContext)
+                .getLong("id", 0)
 
         setSupportActionBar(my_toolbar)
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         userClient.getFriends(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    switchFragment(FriendsFragment.newInstance(1, DummyContent.ITEMS))
+                    switchFragment(FriendsFragment.newInstance(1, it))
                 }, {
 
                 })

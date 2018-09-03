@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.gson.GsonBuilder
+import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.client.UserClient
 import kotlinx.android.synthetic.main.activity_search.*
 import retrofit2.Retrofit
@@ -34,7 +35,8 @@ class SearchActivity : AppCompatActivity() {
         setSupportActionBar(search_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val id = intent.getLongExtra("id", 0)
+        val id = Prefs.get(applicationContext)
+                .getLong("id", 0)
 
         searchFromIdButton.setOnClickListener {
             userClient.getUserByUserId(searchIdView.text.toString())

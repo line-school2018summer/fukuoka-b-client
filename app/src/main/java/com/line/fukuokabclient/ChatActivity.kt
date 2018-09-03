@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.line.fukuokabclient.Adapter.ChatAdapter
+import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.websocket.WebSocketChatClient
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -28,7 +29,8 @@ class ChatActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         channelId = intent.getLongExtra("channelId", 0)
-        senderId = intent.getLongExtra("id", 0)
+        senderId = Prefs.get(applicationContext)
+                .getLong("id", 0)
 
         btnSendMessage.setOnClickListener {
             if (client.isConnected() && editSendMessage.text.toString().isNotEmpty() ) {

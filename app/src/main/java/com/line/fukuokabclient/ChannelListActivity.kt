@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Adapter.ChannelsAdapter
 import com.line.fukuokabclient.client.ChannelClient
-import com.line.fukuokabclient.dto.ChannelDTO
 import kotlinx.android.synthetic.main.activity_channel_list.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
@@ -33,7 +32,7 @@ class ChannelListActivity : AppCompatActivity() {
                 .build()
         val channelClient = retrofit.create(ChannelClient::class.java)
 
-        channelClient.getPublucChannel()
+        channelClient.getPublicChannel()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
