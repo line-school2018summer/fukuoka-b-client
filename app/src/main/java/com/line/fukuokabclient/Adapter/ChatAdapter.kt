@@ -9,7 +9,7 @@ import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.MessageDTO
 import kotlinx.android.synthetic.main.recyclerview_chat.view.*
 
-class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
+class ChatAdapter(private val messages: List<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
     class ViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         var messageText: TextView = view.my_message
