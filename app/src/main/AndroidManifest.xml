@@ -24,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- アクティビティのサイズがキーボードのサイズ分小さくなる -->
+
         <activity
             android:name=".ChatActivity"
             android:windowSoftInputMode="adjustResize"
@@ -43,7 +43,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"></activity>
+            android:label="@string/title_activity_main"/>
+
     </application>
 
 </manifest>

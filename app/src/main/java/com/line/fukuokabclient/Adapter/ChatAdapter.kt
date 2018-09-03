@@ -7,17 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.MessageDTO
+import com.line.fukuokabclient.DateUtils
 import kotlinx.android.synthetic.main.recyclerview_chat.view.*
+import kotlinx.android.synthetic.main.recyclerview_chat2.view.*
 
-class ChatAdapter(private val messages: List<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
-
-    class ViewHolder(val view: View): RecyclerView.ViewHolder(view) {
-        var messageText: TextView = view.my_message
-
-        fun bind(message: String) {
-            messageText.text = message
-        }
-    }
+class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         if (messages[position].senderId == senderId) return 1
@@ -26,18 +20,18 @@ class ChatAdapter(private val messages: List<MessageDTO>, val senderId: Long): R
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var textView:View? = null
+        var viewHolder:ViewHolder? = null
         when (viewType) {
-            1 ->  textView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat, parent, false)
-            2 -> textView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat2, parent, false)
+            1 ->  viewHolder = MyMessageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat, parent, false))
+            2 -> viewHolder = OtherMessageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat2, parent, false))
         }
 
-        return ViewHolder(textView!!)
+        return viewHolder!!
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val message = messages.get(position)
-        holder.bind(message.content)
+        holder.bind(message)
         //holder.view.text = messages[position]
     }
 
@@ -46,4 +40,30 @@ class ChatAdapter(private val messages: List<MessageDTO>, val senderId: Long): R
     }
 
 
+    inner class MyMessageViewHolder(view: View): ViewHolder(view) {
+        private var messageText: TextView = view.my_message
+        private var timeText: TextView = view.my_message_time
+
+        override fun bind(message: MessageDTO) {
+            messageText.text = message.content
+            timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
+        }
+    }
+
+    inner class OtherMessageViewHolder(view: View): ViewHolder(view) {
+        private var messageText: TextView = view.other_message
+        private var timeText: TextView = view.other_message_time
+        private var nameText: TextView = view.other_user_name
+
+        override fun bind(message: MessageDTO) {
+            messageText.text = message.content
+            timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
+            nameText.text = message.senderId.toString()
+        }
+    }
+
+}
+
+open class ViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+    open fun bind(message: MessageDTO){}
 }

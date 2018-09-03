@@ -32,6 +32,9 @@ class ChatActivity : AppCompatActivity() {
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build()
     val channelClient = retrofit.create(ChannelClient::class.java)
+    var items = ArrayList<MessageDTO>()
+    var messageAdapter: ChatAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +57,7 @@ class ChatActivity : AppCompatActivity() {
                 editSendMessage.setText("")
             }
         }
+        messageAdapter = ChatAdapter(items, senderId)
     }
 
     override fun onStart() {
@@ -76,37 +80,23 @@ class ChatActivity : AppCompatActivity() {
     }
 
     fun start() {
-        var items = ArrayList<MessageDTO>()
+        chat_recycler_view.layoutManager = LinearLayoutManager(this)
+        chat_recycler_view.adapter = messageAdapter!!
 
-        channelClient.getMessages(channelId)
+
+        client.topic("/topic/chat.$channelId")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    items = ArrayList(it)
-                    val messageAdapter = ChatAdapter(items, senderId)
-                    chat_recycler_view.layoutManager = LinearLayoutManager(this)
-                    chat_recycler_view.adapter = messageAdapter
-
-                    client.topic("/topic/chat.$channelId")
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                Log.d("hogehoge", "${items!!.size}")
-                                items.add(it)
-                                messageAdapter.notifyDataSetChanged()
-                            }, {
-                                Log.e("hogehoge", "error", it)
-                            }, {
-                                Log.d("hogehoge", "completed")
-                            })
+                    Log.d("hogehoge", "${items.size}")
+                    items.add(it)
+                    messageAdapter!!.notifyDataSetChanged()
+                    chat_recycler_view.scrollToPosition(messageAdapter!!.itemCount-1)
                 }, {
-
+                    Log.e("hogehoge", "error", it)
+                }, {
+                    Log.d("hogehoge", "completed")
                 })
-
-
-
-
-
     }
 
 

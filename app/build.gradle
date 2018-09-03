@@ -16,7 +16,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.line.fukuokabclient"
-        minSdkVersion 27
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -43,6 +43,8 @@ android {
             buildConfigField "String", "BASEURL", "\"http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com\""
             buildConfigField "String", "WSURL", "\"ws://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com/chat\""
         }
+    }
+    productFlavors {
     }
 }
 
