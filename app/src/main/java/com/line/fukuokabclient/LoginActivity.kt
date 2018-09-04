@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
                             .putLong("id", it.id)
                             .apply()
 
-                    var intent = Intent(applicationContext, MainActivity::class.java)
+                    var intent = Intent(applicationContext, SettingsActivity::class.java)
                     startActivity(intent)
                 }, {
 
