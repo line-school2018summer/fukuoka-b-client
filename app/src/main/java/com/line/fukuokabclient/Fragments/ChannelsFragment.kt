@@ -3,6 +3,7 @@ package com.line.fukuokabclient.Fragments
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import com.line.fukuokabclient.Adapter.ChannelsRecyclerViewAdapter
 import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.ChannelDTO
+import kotlinx.android.synthetic.main.fragment_channels_list.view.*
 
 /**
  * A fragment representing a list of Items.
@@ -47,8 +49,12 @@ class ChannelsFragment : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
                 adapter = ChannelsRecyclerViewAdapter(items!!, listener)
+
+                list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
         }
+
+        activity!!.title = "CHANNELs"
         return view
     }
 

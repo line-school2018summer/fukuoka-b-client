@@ -3,6 +3,7 @@ package com.line.fukuokabclient.Fragments
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,6 +15,7 @@ import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.UserDTO
 
 import com.line.fukuokabclient.dummy.DummyContent
+import kotlinx.android.synthetic.main.fragment_friends_list.view.*
 
 /**
  * A fragment representing a list of Items.
@@ -49,8 +51,12 @@ class FriendsFragment : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
                 adapter = FriendsRecyclerViewAdapter(items, listener, FriendsRecyclerViewAdapter.Mode.LIST)
+
+                list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
         }
+
+        activity!!.title = "FRIENDs"
         return view
     }
 
