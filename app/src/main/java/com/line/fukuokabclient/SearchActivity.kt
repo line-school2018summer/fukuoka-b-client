@@ -34,7 +34,6 @@ class SearchActivity : AppCompatActivity() {
 
         setSupportActionBar(search_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.title_search_friend)
 
         val id = Prefs.get(applicationContext)
                 .getLong("id", 0)

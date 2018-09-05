@@ -1,5 +1,6 @@
 package com.line.fukuokabclient
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Color.rgb
 import android.support.v7.app.AppCompatActivity
@@ -75,6 +76,7 @@ class GroupSelectUsersActivity : AppCompatActivity(), SelectFriendsRecyclerViewA
         setContentView(R.layout.activity_group_select_users)
 
         setSupportActionBar(group_select_user_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         friends = intent.getParcelableArrayExtra("friends").toList() as List<UserDTO>
         var friendAdapter = SelectFriendsRecyclerViewAdapter(friends, this)
@@ -100,7 +102,11 @@ class GroupSelectUsersActivity : AppCompatActivity(), SelectFriendsRecyclerViewA
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            Log.d("NEW GROUP", "Success ${it.channel.id}")
+//                            Log.d("NEW GROUP", "Success ${it.channel.id}")
+                            val intent = Intent(applicationContext, ChatActivity::class.java).apply {
+                                putExtra("info", it)
+                            }
+                            startActivity(intent)
                         }, {
                             Log.d("NEW GROUP", "failed ${it.message}")
                         })

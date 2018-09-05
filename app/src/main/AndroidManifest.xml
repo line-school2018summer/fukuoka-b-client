@@ -30,7 +30,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SearchActivity"
-            android:label=""
+            android:label="@string/title_search_friend"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -40,12 +40,12 @@
             </intent-filter>
         </activity>
         　
-
-
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" />
-        <activity android:name=".GroupSelectUsersActivity"></activity>
+        <activity
+            android:name=".GroupSelectUsersActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
