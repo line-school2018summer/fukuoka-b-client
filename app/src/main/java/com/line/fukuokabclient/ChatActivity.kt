@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Adapter.ChatAdapter
 import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.client.ChannelClient
+import com.line.fukuokabclient.client.ResponsePersonalChannelInfo
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.websocket.WebSocketChatClient
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -25,15 +26,9 @@ class ChatActivity : AppCompatActivity() {
     var channelId: Long = 0
     var senderId:Long = 0
 
-    val gson = GsonBuilder().create()
-    val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASEURL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-            .build()
-    val channelClient = retrofit.create(ChannelClient::class.java)
     var items = ArrayList<MessageDTO>()
     var messageAdapter: ChatAdapter? = null
+    var info: ResponsePersonalChannelInfo? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +54,10 @@ class ChatActivity : AppCompatActivity() {
         }
 
         if (intent.getParcelableArrayExtra("messages") != null) items = ArrayList(intent.getParcelableArrayExtra("messages").toList()) as ArrayList<MessageDTO>
+        if (intent.getParcelableExtra<ResponsePersonalChannelInfo>("info") != null) info = intent.getParcelableExtra("info")
 
-        messageAdapter = ChatAdapter(items, senderId)
+        this.title = info?.friend?.name?: "yoyo"
+        messageAdapter = ChatAdapter(info, items, senderId)
     }
 
     override fun onStart() {

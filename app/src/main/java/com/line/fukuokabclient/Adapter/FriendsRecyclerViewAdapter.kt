@@ -13,6 +13,7 @@ import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.UserDTO
 
 import kotlinx.android.synthetic.main.fragment_friends.view.*
+import kotlinx.android.synthetic.main.fragment_friends_select.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [UserDTO] and makes a call to the
@@ -21,8 +22,13 @@ import kotlinx.android.synthetic.main.fragment_friends.view.*
  */
 class FriendsRecyclerViewAdapter(
         private val mValues: List<UserDTO>,
-        private val mListener: OnListFragmentInteractionListener?)
-    : RecyclerView.Adapter<FriendsRecyclerViewAdapter.ViewHolder>() {
+        private val mListener: OnListFragmentInteractionListener?,
+        private val mode:Mode)
+    : RecyclerView.Adapter<UserViewHolder>() {
+
+    enum class Mode {
+        LIST, SELECT
+    }
 
     private val mOnClickListener: View.OnClickListener
 
@@ -35,31 +41,75 @@ class FriendsRecyclerViewAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_friends, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+        when(mode) {
+            Mode.LIST -> {
+                val view = LayoutInflater.from(parent.context)
+                        .inflate(R.layout.fragment_friends, parent, false)
+                return ListViewHolder(view)
+            }
+            Mode.SELECT -> {
+                val view = LayoutInflater.from(parent.context)
+                        .inflate(R.layout.fragment_friends_select, parent, false)
+                return SelectViewHolder(view)
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIconView.setImageResource(R.drawable.default_user_icon)
-        holder.mContentView.text = item.name
-
-        with(holder.mView) {
-            tag = item
-            setOnClickListener(mOnClickListener)
-        }
+        holder.bind(item)
+//        holder.bind()
+//        holder.mIdView.text = item.id.toString()
+//        holder.mContentView.text = item.name
+//
+//        with(holder.mView) {
+//            tag = item
+//            setOnClickListener(mOnClickListener)
+//        }
     }
 
     override fun getItemCount(): Int = mValues.size
 
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
+    inner class ListViewHolder(val mView: View) : UserViewHolder(mView) {
         val mIconView: ImageView = mView.user_icon_img
         val mContentView: TextView = mView.content
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"
         }
+
+        override fun bind(user: UserDTO) {
+            mContentView.text = user.name
+            mIconView.setImageResource(R.drawable.default_user_icon)
+            with(mView) {
+                tag = user
+                setOnClickListener {
+                    mOnClickListener.onClick(it)
+                }
+            }
+        }
     }
+
+    inner class SelectViewHolder(val mView: View): UserViewHolder(mView) {
+        val selectImg: ImageView = mView.image_select
+        val nameView: TextView = mView.txt_select_username
+        var selected = false
+
+        override fun bind(user: UserDTO) {
+            nameView.text = user.name
+            with(mView) {
+                tag = user
+                setOnClickListener {
+                    mOnClickListener.onClick(it)
+                    if (selected) selectImg.alpha = 0f
+                    else selectImg.alpha = 1f
+                }
+            }
+        }
+    }
+}
+
+open class UserViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+    open fun bind(user: UserDTO){}
 }

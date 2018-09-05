@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -78,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
                     var intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)
                 }, {
-
+                    Log.d("LOGIN", "LOGIN")
                 })
 
     }

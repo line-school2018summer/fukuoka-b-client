@@ -48,7 +48,7 @@ class FriendsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = FriendsRecyclerViewAdapter(items, listener)
+                adapter = FriendsRecyclerViewAdapter(items, listener, FriendsRecyclerViewAdapter.Mode.LIST)
             }
         }
 
