@@ -44,9 +44,6 @@ class SearchActivity : AppCompatActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         setName(it.name)
-                        AlertDialog.Builder(this@SearchActivity)
-                                .setTitle("My Data")
-                                .setMessage(it.toString()).show()
 
                         addFriendButton.visibility = View.VISIBLE
                         val friendId = it.id

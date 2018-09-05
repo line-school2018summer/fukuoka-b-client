@@ -37,7 +37,10 @@ class ChatActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         mAuth = FirebaseAuth.getInstance()
-        channelId = intent.getLongExtra("channelId", 0)
+
+        if (intent.getParcelableArrayExtra("messages") != null) items = ArrayList(intent.getParcelableArrayExtra("messages").toList()) as ArrayList<MessageDTO>
+        info = intent.getParcelableExtra("info")
+        channelId = info!!.channel.id!!
         userId = Prefs.get(applicationContext)
                 .getLong("id", 0)
 
@@ -50,10 +53,6 @@ class ChatActivity : AppCompatActivity() {
                 editSendMessage.setText("")
             }
         }
-
-        if (intent.getParcelableArrayExtra("messages") != null) items = ArrayList(intent.getParcelableArrayExtra("messages").toList()) as ArrayList<MessageDTO>
-        if (intent.getParcelableExtra<ResponseChannelInfo>("info") != null) info = intent.getParcelableExtra("info")
-
 
         this.title = if (info!!.users.size == 2) {
             var title = ""
@@ -94,7 +93,7 @@ class ChatActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
             R.id.chat_settings -> {
-                
+
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
