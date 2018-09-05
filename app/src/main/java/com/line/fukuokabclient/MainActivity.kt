@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Fragments.ChannelsFragment
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
             .build()
     val channelClient = retrofit.create(ChannelClient::class.java)
     val userClient = retrofit.create(UserClient::class.java)
+
+    var friends: List<UserDTO> = emptyList()
 
     override fun onFriendFragmentInteraction(item: UserDTO?) {
         channelClient.getPersonalChannel(userId, item!!.id)
@@ -79,7 +82,10 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            switchFragment(FriendsFragment.newInstance(1, it))
+                            friends = it
+                            switchFragment(FriendsFragment.newInstance(1, friends))
+                            my_toolbar.menu.clear()
+                            my_toolbar.inflateMenu(R.menu.main_friends_toolbar)
                         }, {
 
                         })
@@ -92,6 +98,8 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             switchFragment(ChannelsFragment.newInstance(1, it))
+                            my_toolbar.menu.clear()
+                            my_toolbar.inflateMenu(R.menu.main_channel_toolbar)
                         }, {
 
                         })
@@ -118,7 +126,8 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    switchFragment(FriendsFragment.newInstance(1, it))
+                    friends = it
+                    switchFragment(FriendsFragment.newInstance(1, friends))
                 }, {
 
                 })
@@ -141,6 +150,14 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
             R.id.toolbar_add_friend -> {
                 var intent = Intent(applicationContext, SearchActivity::class.java)
                 intent.putExtra("id", userId)
+                startActivity(intent)
+                return true
+            }
+            R.id.toolbar_add_channel -> {
+                var intent = Intent(applicationContext, GroupSelectUsersActivity::class.java)
+                intent.apply {
+                    putExtra("friends", friends.toTypedArray())
+                }
                 startActivity(intent)
                 return true
             }

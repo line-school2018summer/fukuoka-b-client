@@ -13,7 +13,6 @@ import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.UserDTO
 
 import kotlinx.android.synthetic.main.fragment_friends.view.*
-import kotlinx.android.synthetic.main.fragment_friends_select.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [UserDTO] and makes a call to the
@@ -42,31 +41,14 @@ class FriendsRecyclerViewAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        when(mode) {
-            Mode.LIST -> {
-                val view = LayoutInflater.from(parent.context)
-                        .inflate(R.layout.fragment_friends, parent, false)
-                return ListViewHolder(view)
-            }
-            Mode.SELECT -> {
-                val view = LayoutInflater.from(parent.context)
-                        .inflate(R.layout.fragment_friends_select, parent, false)
-                return SelectViewHolder(view)
-            }
-        }
+        val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.fragment_friends, parent, false)
+        return ListViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val item = mValues[position]
         holder.bind(item)
-//        holder.bind()
-//        holder.mIdView.text = item.id.toString()
-//        holder.mContentView.text = item.name
-//
-//        with(holder.mView) {
-//            tag = item
-//            setOnClickListener(mOnClickListener)
-//        }
     }
 
     override fun getItemCount(): Int = mValues.size
@@ -87,24 +69,6 @@ class FriendsRecyclerViewAdapter(
                 tag = user
                 setOnClickListener {
                     mOnClickListener.onClick(it)
-                }
-            }
-        }
-    }
-
-    inner class SelectViewHolder(val mView: View): UserViewHolder(mView) {
-        val selectImg: ImageView = mView.image_select
-        val nameView: TextView = mView.txt_select_username
-        var selected = false
-
-        override fun bind(user: UserDTO) {
-            nameView.text = user.name
-            with(mView) {
-                tag = user
-                setOnClickListener {
-                    mOnClickListener.onClick(it)
-                    if (selected) selectImg.alpha = 0f
-                    else selectImg.alpha = 1f
                 }
             }
         }
