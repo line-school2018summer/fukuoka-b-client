@@ -51,6 +51,8 @@ class FriendsFragment : Fragment() {
                 adapter = FriendsRecyclerViewAdapter(items, listener)
             }
         }
+
+        activity!!.title = "Friends"
         return view
     }
 

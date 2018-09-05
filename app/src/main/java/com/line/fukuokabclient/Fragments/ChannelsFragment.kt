@@ -49,6 +49,8 @@ class ChannelsFragment : Fragment() {
                 adapter = ChannelsRecyclerViewAdapter(items!!, listener)
             }
         }
+
+        activity!!.title = "Channels"
         return view
     }
 

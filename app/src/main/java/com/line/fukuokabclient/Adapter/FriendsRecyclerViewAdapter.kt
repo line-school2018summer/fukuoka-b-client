@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 
 
@@ -42,7 +43,7 @@ class FriendsRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.id.toString()
+        holder.mIconView.setImageResource(R.drawable.default_user_icon)
         holder.mContentView.text = item.name
 
         with(holder.mView) {
@@ -54,7 +55,7 @@ class FriendsRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
+        val mIconView: ImageView = mView.user_icon_img
         val mContentView: TextView = mView.content
 
         override fun toString(): String {
