@@ -8,10 +8,15 @@ import android.widget.TextView
 import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.Utility.DateUtils
+import com.line.fukuokabclient.client.ResponsePersonalChannelInfo
 import kotlinx.android.synthetic.main.recyclerview_chat.view.*
 import kotlinx.android.synthetic.main.recyclerview_chat2.view.*
 
 class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ViewHolder>() {
+    var info:ResponsePersonalChannelInfo? = null
+    constructor(info: ResponsePersonalChannelInfo?, messages: ArrayList<MessageDTO>, senderId: Long): this(messages, senderId) {
+        this.info = info
+    }
 
     override fun getItemViewType(position: Int): Int {
         if (messages[position].senderId == senderId) return 1
@@ -58,7 +63,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
         override fun bind(message: MessageDTO) {
             messageText.text = message.content
             timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
-            nameText.text = message.senderId.toString()
+            nameText.text = info?.friend?.name?: message.senderId.toString()
         }
     }
 
