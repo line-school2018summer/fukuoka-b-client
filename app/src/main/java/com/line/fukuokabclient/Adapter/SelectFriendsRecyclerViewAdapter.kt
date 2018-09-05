@@ -23,7 +23,7 @@ class SelectFriendsRecyclerViewAdapter(
     : RecyclerView.Adapter<SelectFriendsRecyclerViewAdapter.SelectViewHolder>() {
 
     interface OnListItemSelectedInteractionListener {
-        fun OnListItemSelectedInteraction(item: UserDTO, selected: Boolean)
+        fun onListItemSelectedInteraction(item: UserDTO, selected: Boolean)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectViewHolder {
@@ -67,7 +67,7 @@ class SelectFriendsRecyclerViewAdapter(
                         .setListener(null)
                 true
             }
-            mListener?.OnListItemSelectedInteraction(item, selected)
+            mListener?.onListItemSelectedInteraction(item, selected)
         }
     }
 }
