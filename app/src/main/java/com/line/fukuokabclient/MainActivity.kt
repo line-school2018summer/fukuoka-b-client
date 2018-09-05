@@ -43,8 +43,9 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    val channelId = it.id!!
+                    val channelId = it.channel.id!!
 
+                    val info = it
                     channelClient.getMessages(channelId)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                                 val intent = Intent(applicationContext, ChatActivity::class.java).apply {
                                     putExtra("channelId", channelId)
                                     putExtra("messages", it.toTypedArray())
+                                    putExtra("info", info)
                                 }
                                 startActivity(intent)
                             }, {

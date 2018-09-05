@@ -11,7 +11,7 @@ interface ChannelClient {
     fun getPublicChannel(): Observable<List<ChannelDTO>>
 
     @GET("chat/personal/{userId}/{friendId}")
-    fun getPersonalChannel(@Path("userId")userId: Long, @Path("friendId") friendId: Long): Observable<ChannelDTO>
+    fun getPersonalChannel(@Path("userId")userId: Long, @Path("friendId") friendId: Long): Observable<ResponsePersonalChannelInfo>
 
     @GET("chat/messages/{channelId}")
     fun getMessages(@Path("channelId") channelId: Long): Observable<List<MessageDTO>>
