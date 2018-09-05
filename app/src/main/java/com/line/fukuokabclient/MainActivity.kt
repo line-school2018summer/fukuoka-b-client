@@ -67,9 +67,18 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
     }
 
     override fun onChannelsFragmentInteraction(item: ChannelDTO?) {
-        var intent = Intent(applicationContext, ChatActivity::class.java)
-        intent.putExtra("channelId", item!!.id)
-        startActivity(intent)
+        channelClient.getChannelInfo(item!!.id!!)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    val info = it
+                    val intent = Intent(applicationContext, ChatActivity::class.java).apply {
+                        putExtra("channelId", item!!.id)
+                        putExtra("info", info)
+                    }
+                    startActivity(intent)
+                }, {
+                })
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -90,7 +99,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_channels -> {
-                channelClient.getPublicChannel()
+                channelClient.getMyChannels(userId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

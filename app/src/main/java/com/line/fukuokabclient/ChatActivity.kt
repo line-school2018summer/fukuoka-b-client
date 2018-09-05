@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.line.fukuokabclient.Adapter.ChatAdapter
+import com.line.fukuokabclient.Client.Response.ResponseChannelInfo
 import com.line.fukuokabclient.Utility.Prefs
-import com.line.fukuokabclient.Client.Response.ResponsePersonalChannelInfo
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.websocket.WebSocketChatClient
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -19,11 +19,12 @@ class ChatActivity : AppCompatActivity() {
     var mAuth: FirebaseAuth? = null
     var email:String = ""
     var channelId: Long = 0
-    var senderId:Long = 0
+    var userId:Long = 0
 
     var items = ArrayList<MessageDTO>()
     var messageAdapter: ChatAdapter? = null
-    var info: ResponsePersonalChannelInfo? = null
+    var info: ResponseChannelInfo? = null
+    var userMapper: HashMap<Long, String> = HashMap()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,12 +36,12 @@ class ChatActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         channelId = intent.getLongExtra("channelId", 0)
-        senderId = Prefs.get(applicationContext)
+        userId = Prefs.get(applicationContext)
                 .getLong("id", 0)
 
         btnSendMessage.setOnClickListener {
             if (client.isConnected() && editSendMessage.text.toString().isNotEmpty() ) {
-                val message = MessageDTO(null, senderId, channelId, editSendMessage.text.toString(), null)
+                val message = MessageDTO(null, userId, channelId, editSendMessage.text.toString(), null)
                 client.send("/app/chat.$channelId", message.toString())
 
                 // メッセージ送信後は入力欄を空欄にする
@@ -49,10 +50,19 @@ class ChatActivity : AppCompatActivity() {
         }
 
         if (intent.getParcelableArrayExtra("messages") != null) items = ArrayList(intent.getParcelableArrayExtra("messages").toList()) as ArrayList<MessageDTO>
-        if (intent.getParcelableExtra<ResponsePersonalChannelInfo>("info") != null) info = intent.getParcelableExtra("info")
+        if (intent.getParcelableExtra<ResponseChannelInfo>("info") != null) info = intent.getParcelableExtra("info")
 
-        this.title = info?.friend?.name?: "yoyo"
-        messageAdapter = ChatAdapter(info, items, senderId)
+
+        this.title = if (info!!.users.size == 2) {
+            var title = ""
+            info!!.users.forEach {
+                if (it.id != userId) title = it.name
+            }
+            title
+        } else {
+            info?.channel?.name?: "NO NAME"
+        }
+        messageAdapter = ChatAdapter(info, items, userId)
     }
 
     override fun onStart() {

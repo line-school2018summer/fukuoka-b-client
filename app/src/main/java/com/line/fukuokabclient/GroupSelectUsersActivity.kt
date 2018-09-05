@@ -17,6 +17,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Client.ChannelClient
+import com.line.fukuokabclient.Utility.Prefs
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -93,7 +94,9 @@ class GroupSelectUsersActivity : AppCompatActivity(), SelectFriendsRecyclerViewA
         when(item!!.itemId) {
             R.id.toolbar_channel_ok -> {
                 if (selectedFriends.size == 0) return true
-                channelClient.newGroupChannel(hashMapOf(Pair("userIds", selectedFriends.values.map { it.id })))
+                var userIds = selectedFriends.values.map { it.id }.toMutableList()
+                userIds.add(Prefs.get(applicationContext).getLong("id", 0))
+                channelClient.newGroupChannel(hashMapOf(Pair("userIds", userIds)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
