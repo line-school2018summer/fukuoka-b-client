@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.line.fukuokabclient.Adapter.ChatAdapter
 import com.line.fukuokabclient.Client.Response.ResponseChannelInfo
@@ -65,6 +67,11 @@ class ChatActivity : AppCompatActivity() {
         messageAdapter = ChatAdapter(info, items, userId)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.chat_toolbar, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onStart() {
         super.onStart()
         email = mAuth?.currentUser?.email ?: throw Exception("Not Logged in")
@@ -82,6 +89,16 @@ class ChatActivity : AppCompatActivity() {
         super.onPause()
         client.disconnect()
         client = WebSocketChatClient(this)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId) {
+            R.id.chat_settings -> {
+                
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     fun start() {
