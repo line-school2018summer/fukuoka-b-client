@@ -27,15 +27,19 @@
 
         <activity
             android:name=".ChatActivity"
-            android:windowSoftInputMode="adjustResize" />
-
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".SearchActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity
-            android:name=".ChannelListActivity"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>　
 
         <activity
             android:name=".MainActivity"

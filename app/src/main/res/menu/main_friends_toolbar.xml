@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/toolbar_add_friend"
+        android:icon="@drawable/ic_person_add_black_24dp"
+        android:title="@string/title_friends"
+        app:showAsAction="ifRoom"
+        android:visible="true"/>
+
+    <!--<item-->
+        <!--android:id="@+id/toolbar_dashboard"-->
+        <!--android:icon="@drawable/ic_talk_black_24dp"-->
+        <!--android:title="@string/title_channels"-->
+        <!--app:showAsAction="ifRoom"/>-->
+
+    <!--<item-->
+        <!--android:id="@+id/toolbar_notifications"-->
+        <!--android:icon="@drawable/ic_settings_black_24dp"-->
+        <!--android:title="@string/title_settings"-->
+        <!--app:showAsAction="ifRoom"/>-->
+
+</menu>

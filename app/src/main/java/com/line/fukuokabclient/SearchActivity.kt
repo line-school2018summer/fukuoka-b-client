@@ -7,8 +7,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.gson.GsonBuilder
+import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.client.UserClient
-import com.line.fukuokabclient.dto.UserDTO
 import kotlinx.android.synthetic.main.activity_search.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
@@ -17,66 +17,33 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 class SearchActivity : AppCompatActivity() {
+    val gson = GsonBuilder()
+            .create()
+
+    val retrofit = Retrofit.Builder()
+            .baseUrl(BuildConfig.BASEURL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .build()
+
+    val userClient = retrofit.create(UserClient::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val id = intent.getLongExtra("id", 0)
+        setSupportActionBar(search_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        Log.d("CREATE!", "CREATE!")
-        val gson = GsonBuilder()
-                .create()
-
-        val retrofit = Retrofit.Builder()
-//                .baseUrl("http://192.168.0.14:8080")
-                .baseUrl("http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
-
-        val userClient = retrofit.create(UserClient::class.java)
-
-
-        fun setName(user: UserDTO) {
-            userNameView.text = "name : " + user.name
-        }
-
-        fun setInfo(caution: String) {
-            userNameView.text = caution
-        }
+        val id = Prefs.get(applicationContext)
+                .getLong("id", 0)
 
         searchFromIdButton.setOnClickListener {
-//
-            // getUserFromId
-//
-//            userClient.getUserById(Integer.parseInt(searchIdView.text.toString()))
-//                    .enqueue(object : Callback<UserDTO> {
-//                        override fun onFailure(call: Call<UserDTO>, t: Throwable?) {
-//                            Log.d("result", "failure" + t.toString())
-//
-//                        }
-//
-//                        override fun onResponse(call: Call<UserDTO>, response: Response<UserDTO>) {
-//                            if (response.isSuccessful) {
-//                                response.body()?.let {
-//                                    setName(it)
-//
-//                                    AlertDialog.Builder(this@SearchActivity)
-//                                            .setTitle("My Data")
-//                                            .setMessage(it.toString()).show()
-//                                }
-//                            } else {
-//                                Log.d("result", "fail")
-//                            }
-//                        }
-//                    })
-
             userClient.getUserByUserId(searchIdView.text.toString())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        setName(it)
+                        setName(it.name)
                         AlertDialog.Builder(this@SearchActivity)
                                 .setTitle("My Data")
                                 .setMessage(it.toString()).show()
@@ -104,11 +71,15 @@ class SearchActivity : AppCompatActivity() {
                         AlertDialog.Builder(this@SearchActivity)
                                 .setTitle("404")
                                 .setMessage("User Not Found").show()
-//                        Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
                     })
-            //        setName(name)
         }
-
     }
 
+    fun setName(name: String) {
+        userNameView.text = name
+    }
+
+    fun setInfo(caution: String) {
+        userNameView.text = caution
+    }
 }
