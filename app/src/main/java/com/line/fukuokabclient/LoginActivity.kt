@@ -1,6 +1,5 @@
 package com.line.fukuokabclient
 
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Utility.Prefs
-import com.line.fukuokabclient.client.UserClient
+import com.line.fukuokabclient.Client.UserClient
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory

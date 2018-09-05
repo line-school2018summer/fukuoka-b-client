@@ -5,17 +5,12 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Adapter.ChatAdapter
 import com.line.fukuokabclient.Utility.Prefs
-import com.line.fukuokabclient.client.ChannelClient
-import com.line.fukuokabclient.client.ResponsePersonalChannelInfo
+import com.line.fukuokabclient.Client.Response.ResponsePersonalChannelInfo
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.websocket.WebSocketChatClient
 import kotlinx.android.synthetic.main.activity_chat.*
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 

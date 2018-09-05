@@ -40,11 +40,13 @@ class SelectFriendsRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class SelectViewHolder(val mView: View): RecyclerView.ViewHolder(mView), View.OnClickListener {
+        val mIconView: ImageView = mView.user_icon_img as ImageView
         val selectImg: ImageView = mView.image_select
         val nameView: TextView = mView.txt_select_username
         var selected = false
 
         fun bind(user: UserDTO) {
+            mIconView.setImageResource(R.drawable.default_user_icon)
             nameView.text = user.name
             with(mView) {
                 tag = user

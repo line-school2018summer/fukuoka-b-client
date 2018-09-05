@@ -1,4 +1,4 @@
-package com.line.fukuokabclient.client
+package com.line.fukuokabclient.Client.Response
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -33,3 +33,4 @@ data class ResponsePersonalChannelInfo(
         }
     }
 }
+

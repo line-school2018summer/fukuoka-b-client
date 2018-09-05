@@ -54,7 +54,7 @@ class FriendsRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ListViewHolder(val mView: View) : UserViewHolder(mView) {
-        val mIconView: ImageView = mView.user_icon_img
+        val mIconView: ImageView = mView.user_icon_img as ImageView
         val mContentView: TextView = mView.content
 
         override fun toString(): String {

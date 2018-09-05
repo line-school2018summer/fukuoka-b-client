@@ -1,4 +1,4 @@
-package com.line.fukuokabclient.client
+package com.line.fukuokabclient.Client
 import com.line.fukuokabclient.dto.UserDTO
 import retrofit2.Call
 import retrofit2.http.*

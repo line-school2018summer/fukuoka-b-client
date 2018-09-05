@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Utility.Prefs
-import com.line.fukuokabclient.client.UserClient
+import com.line.fukuokabclient.Client.UserClient
 import kotlinx.android.synthetic.main.activity_search.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory

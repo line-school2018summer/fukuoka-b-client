@@ -8,12 +8,12 @@ import android.widget.TextView
 import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.Utility.DateUtils
-import com.line.fukuokabclient.client.ResponsePersonalChannelInfo
+import com.line.fukuokabclient.Client.Response.ResponsePersonalChannelInfo
 import kotlinx.android.synthetic.main.recyclerview_chat.view.*
 import kotlinx.android.synthetic.main.recyclerview_chat2.view.*
 
 class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ViewHolder>() {
-    var info:ResponsePersonalChannelInfo? = null
+    var info: ResponsePersonalChannelInfo? = null
     constructor(info: ResponsePersonalChannelInfo?, messages: ArrayList<MessageDTO>, senderId: Long): this(messages, senderId) {
         this.info = info
     }
