@@ -20,4 +20,6 @@
     <string name="title_friends">友だち</string>
     <string name="title_channels">チャンネル</string>
     <string name="title_settings">設定</string>
+    <string name="toolbar_add_channel">addChannel</string>
+    <string name="title_chat_settings">settings</string>
 </resources>

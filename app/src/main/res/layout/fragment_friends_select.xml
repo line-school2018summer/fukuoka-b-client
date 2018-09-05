@@ -8,31 +8,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="10">
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
         <ImageView
             android:id="@+id/image_select"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
             android:layout_margin="@dimen/text_margin"
             android:src="@drawable/ic_check_circle_black_24dp"
             android:alpha="0"/>
-        <!--<TextView-->
-            <!--android:id="@+id/isSelected"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="@dimen/text_margin"-->
-            <!--android:text="N"-->
-            <!--android:textAppearance="?attr/textAppearanceListItem"-->
-            <!--android:textColor="?attr/actionModeSplitBackground" />-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_icon_img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="16dp"
+            android:src="#d4d4d4" />
 
         <TextView
             android:id="@+id/txt_select_username"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="8"
             android:layout_margin="@dimen/text_margin"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="18dp" />
     </LinearLayout>
 
 

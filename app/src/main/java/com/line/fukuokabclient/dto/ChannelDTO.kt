@@ -5,15 +5,19 @@ import android.os.Parcelable
 
 data class ChannelDTO(
         var id: Long?,
-        var name: String
-) : Parcelable {
+        var name: String,
+        var type: String?
+): Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readValue(Long::class.java.classLoader) as? Long,
-            parcel.readString())
+            parcel.readString(),
+            parcel.readString()) {
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(id)
         parcel.writeString(name)
+        parcel.writeString(type)
     }
 
     override fun describeContents(): Int {
