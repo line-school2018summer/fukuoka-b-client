@@ -56,7 +56,7 @@ class FriendsFragment : Fragment() {
             }
         }
 
-        activity!!.title = "FRIENDs"
+        activity!!.title = getString(R.string.navigation_friends)
         return view
     }
 

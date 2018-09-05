@@ -17,9 +17,10 @@
     <string name="preference_name">com.line.fukuokabclient.PREFERENCE</string>
 
     <string name="title_activity_main">ようこそLlNEへ</string>
-    <string name="title_friends">友だち</string>
-    <string name="title_channels">チャンネル</string>
-    <string name="title_settings">設定</string>
+    <string name="navigation_friends">友だち</string>
+    <string name="navigation_channels">チャンネル</string>
+    <string name="navigation_settings">設定</string>
     <string name="toolbar_add_channel">addChannel</string>
-    <string name="title_chat_settings">settings</string>
+    <string name="title_chat_settings">チャンネル設定</string>
+    <string name="title_search_friend">友だち追加</string>
 </resources>

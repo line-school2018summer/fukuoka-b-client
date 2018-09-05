@@ -4,16 +4,16 @@
     <item
         android:id="@+id/navigation_friends"
         android:icon="@drawable/ic_face_black_24dp"
-        android:title="@string/title_friends" />
+        android:title="@string/navigation_friends" />
 
     <item
         android:id="@+id/navigation_channels"
         android:icon="@drawable/ic_talk_black_24dp"
-        android:title="@string/title_channels" />
+        android:title="@string/navigation_channels" />
 
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings_black_24dp"
-        android:title="@string/title_settings" />
+        android:title="@string/navigation_settings" />
 
 </menu>

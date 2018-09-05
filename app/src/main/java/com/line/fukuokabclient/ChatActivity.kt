@@ -94,7 +94,7 @@ class ChatActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
             R.id.chat_settings -> {
-                
+
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

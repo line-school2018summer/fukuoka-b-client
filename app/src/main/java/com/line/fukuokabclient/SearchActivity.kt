@@ -34,6 +34,7 @@ class SearchActivity : AppCompatActivity() {
 
         setSupportActionBar(search_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title = getString(R.string.title_search_friend)
 
         val id = Prefs.get(applicationContext)
                 .getLong("id", 0)
@@ -44,10 +45,7 @@ class SearchActivity : AppCompatActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         setName(it.name)
-                        AlertDialog.Builder(this@SearchActivity)
-                                .setTitle("My Data")
-                                .setMessage(it.toString()).show()
-
+                        
                         addFriendButton.visibility = View.VISIBLE
                         val friendId = it.id
                         val friendName = it.name

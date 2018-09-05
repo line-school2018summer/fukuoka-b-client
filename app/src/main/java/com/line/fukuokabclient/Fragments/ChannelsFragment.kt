@@ -54,7 +54,7 @@ class ChannelsFragment : Fragment() {
             }
         }
 
-        activity!!.title = "CHANNELs"
+        activity!!.title = getString(R.string.navigation_channels)
         return view
     }
 
