@@ -57,13 +57,14 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                                 }
                                 startActivity(intent)
                             }, {
-
+                                Log.d("foo2", "foo2")
                             })
 
                     startActivity(intent)
                 }, {
 
                 })
+        Log.d("foo", "click")
     }
 
     override fun onChannelsFragmentInteraction(item: ChannelDTO?) {
