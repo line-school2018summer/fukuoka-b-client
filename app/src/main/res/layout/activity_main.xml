@@ -36,6 +36,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:itemIconTint="@color/navigation_bar_color"
+        app:itemTextColor="@color/navigation_bar_color"
         app:menu="@menu/navigation" >
 
     </android.support.design.widget.BottomNavigationView>
