@@ -45,7 +45,7 @@ class SearchActivity : AppCompatActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         setName(it.name)
-                        
+
                         addFriendButton.visibility = View.VISIBLE
                         val friendId = it.id
                         val friendName = it.name
