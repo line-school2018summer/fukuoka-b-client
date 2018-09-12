@@ -184,6 +184,24 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 startActivity(intent)
                 return true
             }
+            R.id.toolbar_update_profile -> {
+                val body = HashMap<String, String>()
+                body["id"] = userId.toString()
+                body["name"] = my_name.text.toString()
+                userClient.updateProfile(body)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Toast.makeText(applicationContext, "変更が保存されました", Toast.LENGTH_LONG).show()
+                            Log.d("myNameChanged", "SUCCESS")
+                        }, {
+                            Toast.makeText(applicationContext, "変更に失敗しました", Toast.LENGTH_LONG).show()
+                            Log.d("myNameChanged", "FAILED " + it.toString())
+
+                        })
+//                my_hitokoto.text
+                return true
+            }
             else -> {
                 return super.onOptionsItemSelected(item)
             }

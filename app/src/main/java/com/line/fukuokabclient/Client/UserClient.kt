@@ -21,4 +21,9 @@ interface UserClient {
 
     @GET("/user/{id}/friends")
     fun getFriends(@Path("id") id: Long): Observable<List<UserDTO>>
+
+    @Headers("Accept: application/json",
+            "Content-type: application/json")
+    @POST("/user/{id}/update")
+    fun updateProfile(@Body body: HashMap<String, String>): Observable<Void>
 }
