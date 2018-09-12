@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.gson.GsonBuilder
+import com.line.fukuokabclient.Client.APIFactory
 import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.Client.UserClient
 import kotlinx.android.synthetic.main.activity_search.*
@@ -17,16 +18,10 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 class SearchActivity : AppCompatActivity() {
-    val gson = GsonBuilder()
-            .create()
-
-    val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASEURL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-            .build()
-
-    val userClient = retrofit.create(UserClient::class.java)
+    var token: String = ""
+    var userClient:UserClient? = null
+    var request = HashMap<String, Long>()
+    var friendName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,37 +32,40 @@ class SearchActivity : AppCompatActivity() {
 
         val id = Prefs.get(applicationContext)
                 .getLong("id", 0)
+        token = Prefs.get(applicationContext).getString("token", "")!!
+
+        userClient = APIFactory.build(token).create(UserClient::class.java)
 
         searchFromIdButton.setOnClickListener {
-            userClient.getUserByUserId(searchIdView.text.toString())
+            userClient!!.getUserByUserId(searchIdView.text.toString())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         setName(it.name)
 
                         addFriendButton.visibility = View.VISIBLE
-                        val friendId = it.id
-                        val friendName = it.name
-                        addFriendButton.setOnClickListener {
-                            val body = HashMap<String, Long>()
-                            body["userId"] = id
-                            body["friendId"] = friendId
-                            userClient.addFriend(body)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe({
-                                        Log.d("ADD", "ADDED!")
-                                        addFriendButton.visibility = View.INVISIBLE
-                                        Toast.makeText(applicationContext, "\"${friendName}\" was added successfully!", Toast.LENGTH_LONG).show()
-                                    }, {
-                                        Log.d("ADD", "FAILED!${it.message}")
-                                    })
-                        }
+                        request["friendId"] = it.id
+                        friendName = it.name
+
                     }, {
                         setInfo("User Not Found")
                         AlertDialog.Builder(this@SearchActivity)
                                 .setTitle("404")
                                 .setMessage("User Not Found").show()
+                    })
+        }
+
+        addFriendButton.setOnClickListener {
+            request["userId"] = id
+            userClient!!.addFriend(request)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        Log.d("ADD", "ADDED!")
+                        addFriendButton.visibility = View.INVISIBLE
+                        Toast.makeText(applicationContext, "\"${friendName}\" was added successfully!", Toast.LENGTH_LONG).show()
+                    }, {
+                        Log.d("ADD", "FAILED!${it.message}")
                     })
         }
     }

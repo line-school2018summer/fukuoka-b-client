@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.gson.GsonBuilder
+import com.line.fukuokabclient.Client.APIFactory
 import com.line.fukuokabclient.Fragments.ChannelsFragment
 import com.line.fukuokabclient.Fragments.FriendsFragment
 import com.line.fukuokabclient.Utility.Prefs
@@ -30,32 +31,28 @@ import rx.schedulers.Schedulers
 class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteractionListener, ChannelsFragment.OnListFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener {
 
     private var userId: Long = 0
-    val gson = GsonBuilder().create()
-    val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASEURL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-            .build()
-    val channelClient = retrofit.create(ChannelClient::class.java)
-    val userClient = retrofit.create(UserClient::class.java)
+    private var token:String = ""
+    var channelClient:ChannelClient? = null
+    var userClient:UserClient? = null
 
     var friends: List<UserDTO> = emptyList()
 
     override fun onFriendFragmentInteraction(item: UserDTO?) {
-        channelClient.getPersonalChannel(userId, item!!.id)
+        channelClient!!.getPersonalChannel(userId, item!!.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     val channelId = it.channel.id!!
 
                     val info = it
-                    channelClient.getMessages(channelId)
+                    channelClient!!.getMessages(channelId)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 val intent = Intent(applicationContext, ChatActivity::class.java).apply {
                                     putExtra("messages", it.toTypedArray())
                                     putExtra("info", info)
+                                    putExtra("token", intent.getStringExtra("token"))
                                 }
                                 startActivity(intent)
                             }, {
@@ -70,13 +67,14 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
     }
 
     override fun onChannelsFragmentInteraction(item: ChannelDTO?) {
-        channelClient.getChannelInfo(item!!.id!!)
+        channelClient!!.getChannelInfo(item!!.id!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     val info = it
                     val intent = Intent(applicationContext, ChatActivity::class.java).apply {
                         putExtra("info", info)
+                        putExtra("token", intent.getStringExtra("token"))
                     }
                     startActivity(intent)
                 }, {
@@ -89,7 +87,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_friends -> {
-                userClient.getFriends(userId)
+                userClient!!.getFriends(userId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -104,7 +102,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_channels -> {
-                channelClient.getMyChannels(userId)
+                channelClient!!.getMyChannels(userId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -143,9 +141,14 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
         userId = Prefs.get(applicationContext)
                 .getLong("id", 0)
 
+        token = Prefs.get(applicationContext).getString("token", "")!!
+
+        channelClient = APIFactory.build(token).create(ChannelClient::class.java)
+        userClient = APIFactory.build(token).create(UserClient::class.java)
+
         setSupportActionBar(my_toolbar)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        userClient.getFriends(userId)
+        userClient!!.getFriends(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -173,6 +176,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
             R.id.toolbar_add_friend -> {
                 var intent = Intent(applicationContext, SearchActivity::class.java)
                 intent.putExtra("id", userId)
+                intent.putExtra("token", intent.getStringExtra("token"))
                 startActivity(intent)
                 return true
             }
@@ -180,6 +184,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 var intent = Intent(applicationContext, GroupSelectUsersActivity::class.java)
                 intent.apply {
                     putExtra("friends", friends.toTypedArray())
+                    putExtra("token", intent.getStringExtra("token"))
                 }
                 startActivity(intent)
                 return true

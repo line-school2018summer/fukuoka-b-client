@@ -47,7 +47,7 @@ class ChatActivity : AppCompatActivity() {
         btnSendMessage.setOnClickListener {
             if (client.isConnected() && editSendMessage.text.toString().isNotEmpty() ) {
                 val message = MessageDTO(null, userId, channelId, editSendMessage.text.toString(), null)
-                client.send("/app/chat.$channelId", message.toString())
+                client.send("/app/chat.$channelId", message.toJson())
 
                 // メッセージ送信後は入力欄を空欄にする
                 editSendMessage.setText("")

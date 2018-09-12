@@ -7,9 +7,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GetTokenResult
 import com.google.gson.GsonBuilder
+import com.line.fukuokabclient.Client.APIClient
+import com.line.fukuokabclient.Client.APIFactory
 import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.Client.UserClient
 import kotlinx.android.synthetic.main.activity_login.*
@@ -28,12 +32,14 @@ import android.support.v4.view.ViewCompat.setBackground
 class LoginActivity : AppCompatActivity() {
     var mAuth: FirebaseAuth? = null
     var mUser: FirebaseUser? = null
+    var token: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         mAuth = FirebaseAuth.getInstance()
+        mUser = mAuth!!.currentUser
 
         //user = User(id = 1, clientNumber = "PT445")
 
@@ -55,8 +61,7 @@ class LoginActivity : AppCompatActivity() {
                             anim.stop()
                             progress.visibility = View.INVISIBLE
                             Toast.makeText(applicationContext, "Signed in", Toast.LENGTH_LONG).show()
-                            mUser = mAuth!!.currentUser
-                            updateUI(mUser!!)
+                            getToken(mUser!!)
                         } else {
 //                            loginProgressBar.visibility = View.INVISIBLE
                             anim.stop()
@@ -65,35 +70,47 @@ class LoginActivity : AppCompatActivity() {
                         }
 
                     }
-
-            //Toast.makeText(applicationContext, "Submitted", Toast.LENGTH_LONG).show()
         }
     }
 
+    fun getToken(mUser: FirebaseUser) {
+        mUser!!.getIdToken(true)
+                .addOnCompleteListener { tokenTask: Task<GetTokenResult> ->
+                    if (!tokenTask.isSuccessful) {
+                        Toast.makeText(applicationContext, "ユーザーサーバーと接続不能", Toast.LENGTH_LONG).show()
+                        return@addOnCompleteListener
+                    }
+
+                    token = tokenTask.result.token
+
+                    if (token == null) {
+                        Log.d("TOKEN2", "NULL")
+                    } else {
+                        Log.d("TOKEN3", "$token")
+                        Prefs.edit(applicationContext)
+                                .putString("token", token)
+                                .apply()
+                        updateUI(mUser!!)
+                    }
+//                    updateUI(mUser!!)
+                }
+    }
+
     fun updateUI(mUser:FirebaseUser) {
-        val gson = GsonBuilder()
-                .create()
-
-        val retrofit = Retrofit.Builder()
-                .baseUrl(BuildConfig.BASEURL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
-
-        val userClient = retrofit.create(UserClient::class.java)
-
-        userClient.getUserByMail(mUser.email!!)
+        APIFactory.build(Prefs.get(applicationContext).getString("token", "none")!!)
+                .create(UserClient::class.java)
+                .getUserByMail(mUser.email!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Prefs.edit(applicationContext)
                             .putLong("id", it.id)
                             .apply()
-
+//                    Log.d("TOKEN3", "$it")
                     var intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)
                 }, {
-                    Log.d("LOGIN", "LOGIN")
+                    Toast.makeText(applicationContext, "ユーザーサーバーと接続不能", Toast.LENGTH_LONG).show()
                 })
 
     }

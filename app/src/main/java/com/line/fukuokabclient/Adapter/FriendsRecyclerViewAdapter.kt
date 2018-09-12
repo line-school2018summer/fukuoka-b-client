@@ -63,7 +63,12 @@ class FriendsRecyclerViewAdapter(
 
         override fun bind(user: UserDTO) {
             mContentView.text = user.name
-            mIconView.setImageResource(R.drawable.default_user_icon)
+            when (user.name) {
+                "ミッキー" -> mIconView.setImageResource(R.drawable.icon_mickey)
+                "ドナルド" -> mIconView.setImageResource(R.drawable.icon_donald)
+                else -> mIconView.setImageResource(R.drawable.default_user_icon)
+            }
+
             with(mView) {
                 tag = user
                 setOnClickListener {
