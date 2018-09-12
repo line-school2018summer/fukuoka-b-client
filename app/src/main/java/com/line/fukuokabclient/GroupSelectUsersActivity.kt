@@ -105,6 +105,7 @@ class GroupSelectUsersActivity : AppCompatActivity(), SelectFriendsRecyclerViewA
 //                            Log.d("NEW GROUP", "Success ${it.channel.id}")
                             val intent = Intent(applicationContext, ChatActivity::class.java).apply {
                                 putExtra("info", it)
+                                putExtra("token", intent.getStringExtra("token"))
                             }
                             startActivity(intent)
                         }, {

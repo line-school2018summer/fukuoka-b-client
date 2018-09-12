@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                                 val intent = Intent(applicationContext, ChatActivity::class.java).apply {
                                     putExtra("messages", it.toTypedArray())
                                     putExtra("info", info)
+                                    putExtra("token", intent.getStringExtra("token"))
                                 }
                                 startActivity(intent)
                             }, {
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                     val info = it
                     val intent = Intent(applicationContext, ChatActivity::class.java).apply {
                         putExtra("info", info)
+                        putExtra("token", intent.getStringExtra("token"))
                     }
                     startActivity(intent)
                 }, {
@@ -154,6 +156,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
             R.id.toolbar_add_friend -> {
                 var intent = Intent(applicationContext, SearchActivity::class.java)
                 intent.putExtra("id", userId)
+                intent.putExtra("token", intent.getStringExtra("token"))
                 startActivity(intent)
                 return true
             }
@@ -161,6 +164,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 var intent = Intent(applicationContext, GroupSelectUsersActivity::class.java)
                 intent.apply {
                     putExtra("friends", friends.toTypedArray())
+                    putExtra("token", intent.getStringExtra("token"))
                 }
                 startActivity(intent)
                 return true
