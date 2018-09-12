@@ -1,6 +1,7 @@
 package com.line.fukuokabclient
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Client.APIFactory
 import com.line.fukuokabclient.Fragments.ChannelsFragment
@@ -15,16 +17,18 @@ import com.line.fukuokabclient.Fragments.FriendsFragment
 import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.Client.ChannelClient
 import com.line.fukuokabclient.Client.UserClient
+import com.line.fukuokabclient.Fragments.SettingsFragment
 import com.line.fukuokabclient.dto.ChannelDTO
 import com.line.fukuokabclient.dto.UserDTO
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_settings.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteractionListener, ChannelsFragment.OnListFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteractionListener, ChannelsFragment.OnListFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener {
 
     private var userId: Long = 0
     private var token:String = ""
@@ -77,6 +81,9 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 })
     }
 
+    override fun onSettingsFragmentInteraction(user: UserDTO?) {
+    }
+
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_friends -> {
@@ -89,7 +96,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                             my_toolbar.menu.clear()
                             my_toolbar.inflateMenu(R.menu.main_friends_toolbar)
                         }, {
-
+                            Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
                         })
 
                 return@OnNavigationItemSelectedListener true
@@ -103,11 +110,23 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                             my_toolbar.menu.clear()
                             my_toolbar.inflateMenu(R.menu.main_channel_toolbar)
                         }, {
-
+                            Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
                         })
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
+                userClient.getUserById(userId.toInt())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            switchFragment(SettingsFragment.newInstance(it.name))
+                            Log.d("myName", it.name)
+                            my_toolbar.menu.clear()
+                            my_toolbar.inflateMenu(R.menu.main_settings_toolbar)
+                        }, {
+                            Log.d("setTextError", it.toString())
+                            Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
+                        })
 
                 return@OnNavigationItemSelectedListener true
             }
@@ -168,6 +187,24 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                     putExtra("token", intent.getStringExtra("token"))
                 }
                 startActivity(intent)
+                return true
+            }
+            R.id.toolbar_update_profile -> {
+                val body = HashMap<String, String>()
+                body["id"] = userId.toString()
+                body["name"] = my_name.text.toString()
+                userClient.updateProfile(body)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Toast.makeText(applicationContext, "変更が保存されました", Toast.LENGTH_LONG).show()
+                            Log.d("myNameChanged", "SUCCESS")
+                        }, {
+                            Toast.makeText(applicationContext, "変更に失敗しました", Toast.LENGTH_LONG).show()
+                            Log.d("myNameChanged", "FAILED " + it.toString())
+
+                        })
+//                my_hitokoto.text
                 return true
             }
             else -> {
