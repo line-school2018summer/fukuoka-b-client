@@ -2,6 +2,7 @@ package com.line.fukuokabclient.dto
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.sql.Timestamp
 
 data class MessageDTO (
@@ -21,6 +22,10 @@ data class MessageDTO (
 
     override fun toString(): String {
         return "{\"senderId\": \"$senderId\", \"channelId\": \"$channelId\", \"content\": \"$content\"}"
+    }
+
+    fun toJson(): String {
+        return ObjectMapper().writeValueAsString(this)
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
