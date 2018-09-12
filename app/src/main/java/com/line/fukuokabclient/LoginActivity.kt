@@ -1,9 +1,11 @@
 package com.line.fukuokabclient
 
 import android.content.Intent
+import android.graphics.drawable.Animatable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,6 +18,9 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import android.graphics.drawable.AnimationDrawable
+import android.support.v4.view.ViewCompat.setBackground
+
 
 /**
  * A login screen that offers login via email/password.
@@ -35,6 +40,10 @@ class LoginActivity : AppCompatActivity() {
         checkLoggedIn()
 
         btn_login.setOnClickListener {
+//            loginProgressBar.visibility = View.VISIBLE
+            progress.visibility = View.VISIBLE
+            val anim = progress.background as Animatable
+            anim.start()
             mAuth!!.signInWithEmailAndPassword(txt_email.text.toString(), txt_password.text.toString())
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -42,10 +51,16 @@ class LoginActivity : AppCompatActivity() {
                                     .putString("email", txt_email.text.toString())
                                     .putString("password", txt_password.text.toString())
                                     .apply()
+//                            loginProgressBar.visibility = View.INVISIBLE
+                            anim.stop()
+                            progress.visibility = View.INVISIBLE
                             Toast.makeText(applicationContext, "Signed in", Toast.LENGTH_LONG).show()
                             mUser = mAuth!!.currentUser
                             updateUI(mUser!!)
                         } else {
+//                            loginProgressBar.visibility = View.INVISIBLE
+                            anim.stop()
+                            progress.visibility = View.INVISIBLE
                             Toast.makeText(applicationContext, "Logged in failed", Toast.LENGTH_LONG).show()
                         }
 
