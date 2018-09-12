@@ -36,7 +36,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="名前"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"/>
 
         </android.support.design.widget.TextInputLayout>
 

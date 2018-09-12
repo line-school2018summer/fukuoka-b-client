@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.line.fukuokabclient.R
+import com.line.fukuokabclient.dto.UserDTO
+import kotlinx.android.synthetic.main.fragment_settings.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,15 +28,15 @@ import com.line.fukuokabclient.R
  */
 class SettingsFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var columnCount = 1
+    private var userName = ""
     private var param2: String = ""
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-            param2 = it.getString(ARG_PARAM2)
+            userName = it.getString(ARG_USER_NAME)
+//            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -46,9 +48,14 @@ class SettingsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
+    override fun onStart() {
+        super.onStart()
+        my_name.setText(userName)
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
+    fun onButtonPressed(user: UserDTO) {
+        listener?.onSettingsFragmentInteraction(user)
     }
 
     override fun onAttach(context: Context) {
@@ -78,7 +85,7 @@ class SettingsFragment : Fragment() {
      */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
+        fun onSettingsFragmentInteraction(user: UserDTO?)
     }
 
     companion object {
@@ -92,16 +99,16 @@ class SettingsFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
 
-        const val ARG_COLUMN_COUNT = "columnCount"
+        const val ARG_USER_NAME = ""
         const val ARG_PARAM2 = "param2"
 
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(userName: String) =
                 SettingsFragment().apply {
-//                    arguments = Bundle().apply {
-//                        putInt(ARG_COLUMUN_COUNT, columnCount)
+                    arguments = Bundle().apply {
+                        putString(ARG_USER_NAME, userName)
 //                        putString(ARG_PARAM2, param2)
-//                    }
+                    }
                 }
     }
 }
