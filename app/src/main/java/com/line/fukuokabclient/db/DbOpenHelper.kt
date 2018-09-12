@@ -22,15 +22,19 @@ class DbOpenHelper(context: Context): ManagedSQLiteOpenHelper(context, "clientDB
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.createTable("balloonColor", true,
-                "id" to INTEGER + PRIMARY_KEY + UNIQUE,
-                "senderId" to TEXT,
-                "channelId" to TEXT,
+                "senderId" to INTEGER + PRIMARY_KEY,
+                "channelId" to INTEGER + PRIMARY_KEY,
                 "colorCode" to TEXT)
 
+//        db?.insert("balloonColor",
+//                "id" to 1,
+//                "senderId" to 1,
+//                "channelId" to 1,
+//                "colorCode" to "#d4d4d4")
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-//        db?.dropTable()
+        db?.dropTable("balloonColor", ifExists = true)
     }
 
 

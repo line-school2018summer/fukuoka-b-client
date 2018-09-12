@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +25,11 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
     var info: ResponseChannelInfo? = null
     var userMapper: HashMap<Long, String> = HashMap()
     var context: Context? = null
+    var balloonColor: String = ""
 
-    constructor(info: ResponseChannelInfo?, messages: ArrayList<MessageDTO>, senderId: Long): this(messages, senderId) {
+    constructor(info: ResponseChannelInfo?, messages: ArrayList<MessageDTO>, senderId: Long, balloonColorCode: String): this(messages, senderId) {
         this.info = info
+        balloonColor = balloonColorCode
         info?.users?.forEach {
             userMapper[it.id] = it.name
         }
@@ -40,7 +43,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var viewHolder:ViewHolder? = null
-//        context = parent.context
+        context = parent.context
         when (viewType) {
             1 ->  viewHolder = MyMessageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat, parent, false))
             2 -> viewHolder = OtherMessageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat2, parent, false))
@@ -59,14 +62,19 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
         return messages.size
     }
 
-
     inner class MyMessageViewHolder(view: View): ViewHolder(view) {
         private var messageText: TextView = view.my_message
         private var timeText: TextView = view.my_message_time
 
         override fun bind(message: MessageDTO) {
+            val helper = DbOpenHelper.getInstance(context)
+//            balloonColor = helper.readableDatabase.select("balloonColor", "colorCode")
+//                    .whereArgs("(senderId = {userId}) and (channelId = {roomId})",
+//                            "userId" to message.senderId,
+//                            "roomId" to message.channelId).toString()
+            Log.d("color", balloonColor)
             messageText.text = message.content
-//            messageText.backgroundTintList = ColorStateList.valueOf(Color.RED)
+//            messageText.backgroundTintList = ColorStateList.valueOf(Color.parseColor(balloonColor))
             timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
         }
     }

@@ -10,9 +10,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.line.fukuokabclient.Adapter.ChatAdapter
 import com.line.fukuokabclient.Client.Response.ResponseChannelInfo
 import com.line.fukuokabclient.Utility.Prefs
+import com.line.fukuokabclient.db.DbOpenHelper
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.websocket.WebSocketChatClient
 import kotlinx.android.synthetic.main.activity_chat.*
+import org.jetbrains.anko.db.StringParser
+import org.jetbrains.anko.db.dropTable
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.select
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
@@ -22,16 +27,18 @@ class ChatActivity : AppCompatActivity() {
     var email:String = ""
     var channelId: Long = 0
     var userId:Long = 0
+    var balloonColorCode: String = ""
 
     var items = ArrayList<MessageDTO>()
     var messageAdapter: ChatAdapter? = null
     var info: ResponseChannelInfo? = null
     var userMapper: HashMap<Long, String> = HashMap()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+
+        val helper = DbOpenHelper.getInstance(this)
 
         setSupportActionBar(chat_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -44,9 +51,26 @@ class ChatActivity : AppCompatActivity() {
         userId = Prefs.get(applicationContext)
                 .getLong("id", 0)
 
+        helper.use {
+            insert("balloonColor",
+                    "senderId" to userId,
+                    "channelId" to channelId,
+                    "colorCode" to "#d4d4d4"
+            )
+        }
+
+        balloonColorCode = helper.readableDatabase.select("balloonColor", "colorCode")
+                .whereArgs("(senderId = {userId}) and (channelId = {roomId})",
+                        "userId" to userId,
+                        "roomId" to channelId).parseSingle(StringParser)
+        Log.d("color", balloonColorCode)
         btnSendMessage.setOnClickListener {
             if (client.isConnected() && editSendMessage.text.toString().isNotEmpty() ) {
                 val message = MessageDTO(null, userId, channelId, editSendMessage.text.toString(), null)
+//                balloonColorCode = helper.readableDatabase.select("balloonColor", "colorCode")
+//                        .whereArgs("(senderId = {userId}) and (channelId = {roomId})",
+//                                "userId" to message.senderId,
+//                                "roomId" to message.channelId).toString()
                 client.send("/app/chat.$channelId", message.toJson())
 
                 // メッセージ送信後は入力欄を空欄にする
@@ -63,7 +87,7 @@ class ChatActivity : AppCompatActivity() {
         } else {
             info?.channel?.name?: "NO NAME"
         }
-        messageAdapter = ChatAdapter(info, items, userId)
+        messageAdapter = ChatAdapter(info, items, userId, balloonColorCode)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -74,6 +98,12 @@ class ChatActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         email = mAuth?.currentUser?.email ?: throw Exception("Not Logged in")
+
+        val helper = DbOpenHelper.getInstance(this)
+//        val balloonColorCode: String = helper.readableDatabase.select("balloonColor", "colorCode")
+//                .whereArgs("(senderId = {message.senderId) and (channelId = {message.channelId})",
+//                        "senderId" to userId,
+//                        "channelId" to channelId) as String
     }
 
     override fun onResume() {
