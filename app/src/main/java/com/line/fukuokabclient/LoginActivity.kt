@@ -10,7 +10,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
 import com.google.gson.GsonBuilder
-import com.line.fukuokabclient.Client.PollingService
+import com.line.fukuokabclient.Client.APIClient
+import com.line.fukuokabclient.Client.APIFactory
 import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.Client.UserClient
 import kotlinx.android.synthetic.main.activity_login.*
@@ -48,62 +49,53 @@ class LoginActivity : AppCompatActivity() {
                                     .putString("password", txt_password.text.toString())
                                     .apply()
                             Toast.makeText(applicationContext, "Signed in", Toast.LENGTH_LONG).show()
-                            updateUI(mUser!!)
+                            getToken(mUser!!)
                         } else {
                             Toast.makeText(applicationContext, "Logged in failed", Toast.LENGTH_LONG).show()
                         }
 
                     }
-
-            mUser!!.getIdToken(true)
-                    .addOnCompleteListener { tokenTask: Task<GetTokenResult> ->
-                        if (!tokenTask.isSuccessful) {
-                            Log.d("TOKEN", "TOKEN")
-                        }
-
-                        token = tokenTask.result.token
-
-                        if (token == null) {
-                            Log.d("TOKEN2", "TOKEN2")
-                        } else {
-                            updateUI(mUser!!)
-                        }
-                    }
-
-            //Toast.makeText(applicationContext, "Submitted", Toast.LENGTH_LONG).show()
         }
     }
 
+    fun getToken(mUser: FirebaseUser) {
+        mUser!!.getIdToken(true)
+                .addOnCompleteListener { tokenTask: Task<GetTokenResult> ->
+                    if (!tokenTask.isSuccessful) {
+                        Toast.makeText(applicationContext, "ユーザーサーバーと接続不能", Toast.LENGTH_LONG).show()
+                        return@addOnCompleteListener
+                    }
+
+                    token = tokenTask.result.token
+
+                    if (token == null) {
+                        Log.d("TOKEN2", "NULL")
+                    } else {
+                        Log.d("TOKEN3", "$token")
+                        Prefs.edit(applicationContext)
+                                .putString("token", token)
+                                .apply()
+                        updateUI(mUser!!)
+                    }
+//                    updateUI(mUser!!)
+                }
+    }
+
     fun updateUI(mUser:FirebaseUser) {
-        val gson = GsonBuilder()
-                .create()
-
-        val retrofit = Retrofit.Builder()
-                .baseUrl(BuildConfig.BASEURL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
-
-        val userClient = retrofit.create(UserClient::class.java)
-
-
-        userClient.getUserByMail(mUser.email!!)
+        APIFactory.build(Prefs.get(applicationContext).getString("token", "none")!!)
+                .create(UserClient::class.java)
+                .getUserByMail(mUser.email!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Prefs.edit(applicationContext)
                             .putLong("id", it.id)
                             .apply()
-
+//                    Log.d("TOKEN3", "$it")
                     var intent = Intent(applicationContext, MainActivity::class.java)
-                    intent.putExtra("token", token)
                     startActivity(intent)
-
-                    val service = Intent(applicationContext, PollingService::class.java)
-                    service.putExtra("token", token)
-                    startService(service)
                 }, {
-                    Log.d("LOGIN", "LOGIN")
+                    Toast.makeText(applicationContext, "ユーザーサーバーと接続不能", Toast.LENGTH_LONG).show()
                 })
 
     }
