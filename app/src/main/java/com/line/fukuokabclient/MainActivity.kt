@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
-                userClient.getUserById(userId.toInt())
+                userClient!!.getUserById(userId.toInt())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 val body = HashMap<String, String>()
                 body["id"] = userId.toString()
                 body["name"] = my_name.text.toString()
-                userClient.updateProfile(body)
+                userClient!!.updateProfile(body)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

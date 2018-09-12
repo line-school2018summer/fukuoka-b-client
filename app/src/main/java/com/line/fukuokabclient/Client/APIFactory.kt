@@ -17,7 +17,7 @@ interface APIFactory {
 
         fun build(token: String): Retrofit {
             val authenticatedClient = OkHttpClient().newBuilder()
-                    .readTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(50, TimeUnit.SECONDS)
                     .addInterceptor(Interceptor { chain ->
                         chain.proceed(
                                 chain.request()

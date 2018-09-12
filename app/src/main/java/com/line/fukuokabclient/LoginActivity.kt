@@ -90,14 +90,14 @@ class LoginActivity : AppCompatActivity() {
                         Prefs.edit(applicationContext)
                                 .putString("token", token)
                                 .apply()
-                        updateUI(mUser!!)
+                        updateUI(mUser!!, token!!)
                     }
 //                    updateUI(mUser!!)
                 }
     }
 
-    fun updateUI(mUser:FirebaseUser) {
-        APIFactory.build(Prefs.get(applicationContext).getString("token", "none")!!)
+    fun updateUI(mUser:FirebaseUser, token: String) {
+        APIFactory.build(token)
                 .create(UserClient::class.java)
                 .getUserByMail(mUser.email!!)
                 .subscribeOn(Schedulers.io())
@@ -111,8 +111,9 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                 }, {
                     Toast.makeText(applicationContext, "ユーザーサーバーと接続不能", Toast.LENGTH_LONG).show()
+                    Log.d("TOKEN3", "$it")
                 })
-
+        Log.d("TOKEN3", "in update")
     }
 
     fun checkLoggedIn() {
