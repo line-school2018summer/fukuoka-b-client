@@ -1,6 +1,7 @@
 package com.line.fukuokabclient
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -14,6 +15,7 @@ import com.line.fukuokabclient.Fragments.FriendsFragment
 import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.Client.ChannelClient
 import com.line.fukuokabclient.Client.UserClient
+import com.line.fukuokabclient.Fragments.SettingsFragment
 import com.line.fukuokabclient.dto.ChannelDTO
 import com.line.fukuokabclient.dto.UserDTO
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,7 +25,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteractionListener, ChannelsFragment.OnListFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteractionListener, ChannelsFragment.OnListFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener {
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private var userId: Long = 0
     val gson = GsonBuilder().create()
@@ -110,6 +115,9 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
+                switchFragment(SettingsFragment.newInstance())
+                my_toolbar.menu.clear()
+                my_toolbar.inflateMenu(R.menu.main_settings_toolbar)
 
                 return@OnNavigationItemSelectedListener true
             }
