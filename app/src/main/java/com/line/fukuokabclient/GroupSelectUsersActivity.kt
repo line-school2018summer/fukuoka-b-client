@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.gson.GsonBuilder
+import com.line.fukuokabclient.Client.APIFactory
 import com.line.fukuokabclient.Client.ChannelClient
 import com.line.fukuokabclient.Utility.Prefs
 import retrofit2.Retrofit
@@ -27,16 +28,8 @@ import rx.schedulers.Schedulers
 
 
 class GroupSelectUsersActivity : AppCompatActivity(), SelectFriendsRecyclerViewAdapter.OnListItemSelectedInteractionListener {
-
-    val gson = GsonBuilder()
-            .create()
-    val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASEURL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-            .build()
-
-    val channelClient = retrofit.create(ChannelClient::class.java)
+    var channelClient:ChannelClient? = null
+    var token:String = ""
 
     val blue = ForegroundColorSpan(rgb(124, 187, 255))
     val grey = ForegroundColorSpan(rgb(170, 170, 170))
@@ -79,6 +72,9 @@ class GroupSelectUsersActivity : AppCompatActivity(), SelectFriendsRecyclerViewA
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         friends = intent.getParcelableArrayExtra("friends").toList() as List<UserDTO>
+        token = Prefs.get(applicationContext).getString("token", "")!!
+        channelClient = APIFactory.build(token).create(ChannelClient::class.java)
+
         var friendAdapter = SelectFriendsRecyclerViewAdapter(friends, this)
 
         group_select_user_recycler_view.layoutManager = LinearLayoutManager(this)
@@ -98,13 +94,14 @@ class GroupSelectUsersActivity : AppCompatActivity(), SelectFriendsRecyclerViewA
                 if (selectedFriends.size == 0) return true
                 var userIds = selectedFriends.values.map { it.id }.toMutableList()
                 userIds.add(Prefs.get(applicationContext).getLong("id", 0))
-                channelClient.newGroupChannel(hashMapOf(Pair("userIds", userIds)))
+                channelClient!!.newGroupChannel(hashMapOf(Pair("userIds", userIds)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
 //                            Log.d("NEW GROUP", "Success ${it.channel.id}")
                             val intent = Intent(applicationContext, ChatActivity::class.java).apply {
                                 putExtra("info", it)
+                                putExtra("token", intent.getStringExtra("token"))
                             }
                             startActivity(intent)
                         }, {

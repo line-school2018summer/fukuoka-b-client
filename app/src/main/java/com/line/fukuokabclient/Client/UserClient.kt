@@ -21,4 +21,7 @@ interface UserClient {
 
     @GET("/user/{id}/friends")
     fun getFriends(@Path("id") id: Long): Observable<List<UserDTO>>
+
+    @GET("/test")
+    fun getHello(@Header("Token") token:String): Observable<UserDTO>
 }

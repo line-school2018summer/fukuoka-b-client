@@ -1,5 +1,8 @@
 package com.line.fukuokabclient.Adapter
 
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -56,6 +59,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
 
         override fun bind(message: MessageDTO) {
             messageText.text = message.content
+//            messageText.backgroundTintList = ColorStateList.valueOf(Color.RED)
             timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
         }
     }
