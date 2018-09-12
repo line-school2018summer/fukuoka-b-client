@@ -1,5 +1,6 @@
 package com.line.fukuokabclient.Adapter
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -8,16 +9,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.line.fukuokabclient.ChatActivity
 import com.line.fukuokabclient.Client.Response.ResponseChannelInfo
 import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.Utility.DateUtils
 import kotlinx.android.synthetic.main.recyclerview_chat.view.*
 import kotlinx.android.synthetic.main.recyclerview_chat2.view.*
+import com.line.fukuokabclient.db.DbOpenHelper
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.select
 
 class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ViewHolder>() {
     var info: ResponseChannelInfo? = null
     var userMapper: HashMap<Long, String> = HashMap()
+    var context: Context? = null
 
     constructor(info: ResponseChannelInfo?, messages: ArrayList<MessageDTO>, senderId: Long): this(messages, senderId) {
         this.info = info
@@ -34,6 +40,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var viewHolder:ViewHolder? = null
+//        context = parent.context
         when (viewType) {
             1 ->  viewHolder = MyMessageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat, parent, false))
             2 -> viewHolder = OtherMessageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_chat2, parent, false))
