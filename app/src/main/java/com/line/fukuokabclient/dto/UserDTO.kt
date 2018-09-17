@@ -7,10 +7,12 @@ data class UserDTO(
         var id: Long,
         var name: String,
         var userId: String,
-        var mail: String
+        var mail: String,
+        var hitokoto: String
         ) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
+            parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString()) {
@@ -21,6 +23,7 @@ data class UserDTO(
         parcel.writeString(name)
         parcel.writeString(userId)
         parcel.writeString(mail)
+        parcel.writeString(hitokoto)
     }
 
     override fun describeContents(): Int {

@@ -29,12 +29,14 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 class SettingsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var userName = ""
+    private var hitokoto = ""
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            userName = it.getString(ARG_USER_NAME)
+            userName = it.getString(ARG_USER_NAME)!!
+            hitokoto = it.getString(ARG_USER_HITOKOTO) ?: ""
         }
     }
 
@@ -49,6 +51,7 @@ class SettingsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         my_name.setText(userName)
+        my_hitokoto.setText(hitokoto)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -97,13 +100,15 @@ class SettingsFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
 
-        const val ARG_USER_NAME = ""
+        const val ARG_USER_NAME = "name"
+        const val ARG_USER_HITOKOTO = "hitokoto"
 
         @JvmStatic
-        fun newInstance(userName: String) =
+        fun newInstance(user: UserDTO) =
                 SettingsFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_USER_NAME, userName)
+                        putString(ARG_USER_NAME, user.name)
+                        putString(ARG_USER_HITOKOTO, user.hitokoto)
                     }
                 }
     }
