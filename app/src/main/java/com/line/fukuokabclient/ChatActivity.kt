@@ -10,9 +10,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.line.fukuokabclient.Adapter.ChatAdapter
 import com.line.fukuokabclient.Client.Response.ResponseChannelInfo
 import com.line.fukuokabclient.Utility.Prefs
+import com.line.fukuokabclient.db.ColorDataParser
+import com.line.fukuokabclient.db.DbOpenHelper
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.websocket.WebSocketChatClient
 import kotlinx.android.synthetic.main.activity_chat.*
+import org.jetbrains.anko.db.*
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
@@ -26,7 +29,7 @@ class ChatActivity : AppCompatActivity() {
     var items = ArrayList<MessageDTO>()
     var messageAdapter: ChatAdapter? = null
     var info: ResponseChannelInfo? = null
-    var userMapper: HashMap<Long, String> = HashMap()
+    var userMapper: HashMap<Long, Int> = HashMap()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +66,41 @@ class ChatActivity : AppCompatActivity() {
         } else {
             info?.channel?.name?: "NO NAME"
         }
-        messageAdapter = ChatAdapter(info, items, userId)
+        userMapperInit()
+
+        messageAdapter = ChatAdapter(info, items, userId, userMapper)
+    }
+
+    fun userMapperInit() {
+        var dbHelper = DbOpenHelper.getInstance(applicationContext)
+        info!!.users.forEach {
+            dbHelper.readableDatabase.select("msgColorMap", "count(userId)")
+                    .whereArgs("(userId = {id}) and (channelId = {channelId})",
+                            "id" to it.id,
+                            "channelId" to info!!.channel.id!!).exec {
+                        if (parseSingle(IntParser) == 0) {
+                            dbHelper.writableDatabase.insert("msgColorMap",
+                                    "userId" to it.id,
+                                    "channelId" to info!!.channel.id!!,
+                                    "colorCode" to "#CE93D8")
+//                            "#d4d4d4"
+                        }
+                    }
+        }
+        dbHelper.use {
+//            update("msgColorMap",
+//                    "colorCode" to "#d4d4d4")
+//                    .whereArgs("channelId = ${info!!.channel.id!!}").exec()
+
+            select("msgColorMap", "userId", "colorCode" )
+                    .whereArgs("channelId = ${info!!.channel.id!!}")
+                    .exec {
+                        var a = parseList(ColorDataParser())
+                        a.forEach {
+                            userMapper[it.userId] = it.colorCode
+                        }
+                    }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

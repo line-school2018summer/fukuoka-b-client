@@ -18,12 +18,14 @@ import kotlinx.android.synthetic.main.recyclerview_chat2.view.*
 class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ViewHolder>() {
     var info: ResponseChannelInfo? = null
     var userMapper: HashMap<Long, String> = HashMap()
+    var userColorMapper: HashMap<Long, Int> = HashMap()
 
-    constructor(info: ResponseChannelInfo?, messages: ArrayList<MessageDTO>, senderId: Long): this(messages, senderId) {
+    constructor(info: ResponseChannelInfo?, messages: ArrayList<MessageDTO>, senderId: Long, colorMap: HashMap<Long, Int>): this(messages, senderId) {
         this.info = info
         info?.users?.forEach {
             userMapper[it.id] = it.name
         }
+        this.userColorMapper = colorMap
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -59,7 +61,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
 
         override fun bind(message: MessageDTO) {
             messageText.text = message.content
-//            messageText.backgroundTintList = ColorStateList.valueOf(Color.RED)
+            messageText.backgroundTintList = ColorStateList.valueOf(userColorMapper[message.senderId]!!)
             timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
         }
     }
