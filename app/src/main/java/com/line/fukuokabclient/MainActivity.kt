@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            switchFragment(SettingsFragment.newInstance(it.name))
+                            switchFragment(SettingsFragment.newInstance(it))
                             Log.d("myName", it.name)
                             my_toolbar.menu.clear()
                             my_toolbar.inflateMenu(R.menu.main_settings_toolbar)
@@ -193,6 +193,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 val body = HashMap<String, String>()
                 body["id"] = userId.toString()
                 body["name"] = my_name.text.toString()
+                body["hitokoto"] = my_hitokoto.text.toString()
                 userClient!!.updateProfile(body)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

@@ -14,7 +14,6 @@ import com.line.fukuokabclient.Adapter.FriendsRecyclerViewAdapter
 import com.line.fukuokabclient.R
 import com.line.fukuokabclient.dto.UserDTO
 
-import com.line.fukuokabclient.dummy.DummyContent
 import kotlinx.android.synthetic.main.fragment_friends_list.view.*
 
 /**
