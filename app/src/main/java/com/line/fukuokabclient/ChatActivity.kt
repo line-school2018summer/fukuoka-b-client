@@ -41,7 +41,6 @@ class ChatActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
 
-        if (intent.getParcelableArrayExtra("messages") != null) items = ArrayList(intent.getParcelableArrayExtra("messages").toList()) as ArrayList<MessageDTO>
         info = intent.getParcelableExtra("info")
         channelId = info!!.channel.id!!
         userId = Prefs.get(applicationContext)
@@ -68,7 +67,7 @@ class ChatActivity : AppCompatActivity() {
         }
         userMapperInit()
 
-        messageAdapter = ChatAdapter(info, items, userId, userMapper)
+        messageAdapter = ChatAdapter(info, info!!.messages, userId, userMapper)
     }
 
     fun userMapperInit() {
@@ -148,7 +147,7 @@ class ChatActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Log.d("hogehoge", "${items.size}")
-                    items.add(it)
+                    info!!.messages.add(it)
                     messageAdapter!!.notifyDataSetChanged()
                     chat_recycler_view.scrollToPosition(messageAdapter!!.itemCount-1)
                 }, {

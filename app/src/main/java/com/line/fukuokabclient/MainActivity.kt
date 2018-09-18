@@ -42,23 +42,10 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    val channelId = it.channel.id!!
-
-                    val info = it
-                    channelClient!!.getMessages(channelId)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                val intent = Intent(applicationContext, ChatActivity::class.java).apply {
-                                    putExtra("messages", it.toTypedArray())
-                                    putExtra("info", info)
-                                }
-                                startActivity(intent)
-                            }, {
-                                Log.d("foo2", "foo2")
-                            })
-
-//                    startActivity(intent)
+                    val intent = Intent(applicationContext, ChatActivity::class.java).apply {
+                        putExtra("info", it)
+                    }
+                    startActivity(intent)
                 }, {
 
                 })
@@ -70,19 +57,10 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    val info = it
-                    channelClient!!.getMessages(info.channel.id!!)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                val intent = Intent(applicationContext, ChatActivity::class.java).apply {
-                                    putExtra("messages", it.toTypedArray())
-                                    putExtra("info", info)
-                                }
-                                startActivity(intent)
-                            }, {
-                                Log.d("foo2", "foo2")
-                            })
+                    val intent = Intent(applicationContext, ChatActivity::class.java).apply {
+                        putExtra("info", it)
+                    }
+                    startActivity(intent)
                 }, {
                 })
     }
