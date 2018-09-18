@@ -107,7 +107,9 @@ class ChatActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.chat_toolbar, menu)
+        when(info!!.channel.type) {
+            "GROUP" -> menuInflater.inflate(R.menu.chat_toolbar, menu)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -137,7 +139,6 @@ class ChatActivity : AppCompatActivity() {
                 intent.apply {
                     putExtra("id", channelId)
                     putExtra("name", channelName)
-                    putExtra("token", intent.getStringExtra("token"))
                 }
                 startActivity(intent)
                 return true

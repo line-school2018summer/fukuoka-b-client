@@ -28,21 +28,15 @@ class ChannelSettingActivity : AppCompatActivity() {
         group_setting_toolbar.setTitle("グループ設定")
         setSupportActionBar(group_setting_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        channelId = intent.getLongExtra("id", 0)
 
-        if (intent.getLongExtra("id", 0) != null) {
-            channelId = intent.getLongExtra("id", 0)
-            Log.d("id", channelId.toString())
-        }
 
         if (intent.getStringExtra("name") != null) {
             channelName = intent.getStringExtra("name")
             Log.d("name", channelName)
         }
 
-        if (intent.getStringExtra("token") != null) {
-            token = intent.getStringExtra("token")
-        }
-
+        token = Prefs.get(applicationContext).getString("token", "")!!
 
         channelClient = APIFactory.build(token).create(ChannelClient::class.java)
 
