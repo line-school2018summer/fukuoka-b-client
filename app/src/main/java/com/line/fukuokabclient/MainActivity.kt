@@ -52,14 +52,13 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                                 val intent = Intent(applicationContext, ChatActivity::class.java).apply {
                                     putExtra("messages", it.toTypedArray())
                                     putExtra("info", info)
-                                    putExtra("token", intent.getStringExtra("token"))
                                 }
                                 startActivity(intent)
                             }, {
                                 Log.d("foo2", "foo2")
                             })
 
-                    startActivity(intent)
+//                    startActivity(intent)
                 }, {
 
                 })
@@ -72,11 +71,18 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     val info = it
-                    val intent = Intent(applicationContext, ChatActivity::class.java).apply {
-                        putExtra("info", info)
-                        putExtra("token", intent.getStringExtra("token"))
-                    }
-                    startActivity(intent)
+                    channelClient!!.getMessages(info.channel.id!!)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                val intent = Intent(applicationContext, ChatActivity::class.java).apply {
+                                    putExtra("messages", it.toTypedArray())
+                                    putExtra("info", info)
+                                }
+                                startActivity(intent)
+                            }, {
+                                Log.d("foo2", "foo2")
+                            })
                 }, {
                 })
     }
