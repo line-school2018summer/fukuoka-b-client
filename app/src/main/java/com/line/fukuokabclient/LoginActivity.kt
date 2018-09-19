@@ -103,9 +103,9 @@ class LoginActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    Prefs.edit(applicationContext)
-                            .putLong("id", it.id)
-                            .apply()
+//                    Prefs.edit(applicationContext)
+//                            .putLong("id", it.id)
+//                            .apply()
 //                    Log.d("TOKEN3", "$it")
                     var intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)

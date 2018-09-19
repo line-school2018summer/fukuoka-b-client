@@ -1,14 +1,20 @@
 package com.line.fukuokabclient
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.text.InputType
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Client.APIFactory
@@ -34,6 +40,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
     private var token:String = ""
     var channelClient:ChannelClient? = null
     var userClient:UserClient? = null
+    var isSettingEnable = false
 
     var friends: List<UserDTO> = emptyList()
 
@@ -78,6 +85,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                     }
                     startActivity(intent)
                 }, {
+                    Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
                 })
     }
 
@@ -112,9 +120,11 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                         }, {
                             Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
                         })
+
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
+                isSettingEnable = false
                 userClient!!.getUserById(userId.toInt())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -155,7 +165,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                     friends = it
                     switchFragment(FriendsFragment.newInstance(1, friends))
                 }, {
-
+                    Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
                 })
     }
 
@@ -171,6 +181,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
         transaction.commit()
     }
 
+    @SuppressLint("LongLogTag")
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.toolbar_add_friend -> {
@@ -190,22 +201,58 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 return true
             }
             R.id.toolbar_update_profile -> {
-                val body = HashMap<String, String>()
-                body["id"] = userId.toString()
-                body["name"] = my_name.text.toString()
-                body["hitokoto"] = my_hitokoto.text.toString()
-                userClient!!.updateProfile(body)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            Toast.makeText(applicationContext, "変更が保存されました", Toast.LENGTH_LONG).show()
-                            Log.d("myNameChanged", "SUCCESS")
-                        }, {
-                            Toast.makeText(applicationContext, "変更に失敗しました", Toast.LENGTH_LONG).show()
-                            Log.d("myNameChanged", "FAILED " + it.toString())
+                val nameView = findViewById<EditText>(my_name.id)
+                val hitokotoView = findViewById<EditText>(my_hitokoto.id)
+                when (isSettingEnable) {
+                    true -> {
+                        val body = HashMap<String, String>()
+                        body["id"] = userId.toString()
+                        body["name"] = nameView.text.toString()
+                        body["hitokoto"] = hitokotoView.text.toString()
+                        userClient!!.updateProfile(body)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    Toast.makeText(applicationContext, "変更が保存されました", Toast.LENGTH_LONG).show()
+                                    Log.d("myNameChanged", "SUCCESS")
+                                }, {
+                                    Toast.makeText(applicationContext, "変更に失敗しました", Toast.LENGTH_LONG).show()
+                                    Log.d("myNameChanged", "FAILED " + it.toString())
 
-                        })
-//                my_hitokoto.text
+                                })
+                        item.title = "編集"
+                        with(nameView) {
+                            setTextColor(Color.parseColor("#555555"))
+                            isEnabled = false
+                        }
+                        with (hitokotoView) {
+                            setTextColor(Color.parseColor("#555555"))
+                            isEnabled = false
+                        }
+                        isSettingEnable = false
+                    }
+                    false -> {
+
+                        with(nameView) {
+                            setTextColor(Color.parseColor("#000000"))
+                            isEnabled = true
+                        }
+                        with (hitokotoView) {
+                            setTextColor(Color.parseColor("#000000"))
+                            isEnabled = true
+                            isFocusable = true
+                        }
+                        try {
+                            nameView.requestFocus()
+                        } catch (e:Exception){
+                            Log.e("EditTextError", e.toString())
+                        }
+                        val ok = SpannableString("OK")
+                        ok.setSpan(ForegroundColorSpan(Color.rgb(124, 187, 255)), 0, 2, 0)
+                        item.title = ok
+                        isSettingEnable = true
+                    }
+                }
                 return true
             }
             else -> {

@@ -24,10 +24,10 @@ android {
     }
     buildTypes {
         debug {
-//            buildConfigField "String", "BASEURL", "\"http://172.16.0.31:8080\""
-//            buildConfigField "String", "WSURL", "\"ws://172.16.0.31:8080/chat\""
-            buildConfigField "String", "BASEURL", "\"http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com\""
-            buildConfigField "String", "WSURL", "\"ws://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com/chat\""
+            buildConfigField "String", "BASEURL", "\"http://172.16.0.31:8080\""
+            buildConfigField "String", "WSURL", "\"ws://172.16.0.31:8080/chat\""
+//            buildConfigField "String", "BASEURL", "\"http://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com\""
+//            buildConfigField "String", "WSURL", "\"ws://ec2-52-194-226-224.ap-northeast-1.compute.amazonaws.com/chat\""
         }
         debug_server {
             debuggable true
