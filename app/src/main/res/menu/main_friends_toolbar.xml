@@ -6,8 +6,8 @@
         android:id="@+id/toolbar_add_friend"
         android:icon="@drawable/ic_person_add_black_24dp"
         android:title="@string/navigation_friends"
-        app:showAsAction="ifRoom"
-        android:visible="true"/>
+        android:visible="true"
+        app:showAsAction="ifRoom" />
 
     <!--<item-->
         <!--android:id="@+id/toolbar_dashboard"-->

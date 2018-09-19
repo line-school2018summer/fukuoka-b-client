@@ -1,5 +1,6 @@
 package com.line.fukuokabclient
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.line.fukuokabclient.Adapter.ChatAdapter
+import com.line.fukuokabclient.Client.ChannelClient
 import com.line.fukuokabclient.Client.Response.ResponseChannelInfo
 import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.dto.MessageDTO
@@ -21,6 +23,7 @@ class ChatActivity : AppCompatActivity() {
     var mAuth: FirebaseAuth? = null
     var email:String = ""
     var channelId: Long = 0
+    var channelName: String = ""
     var userId:Long = 0
 
     var items = ArrayList<MessageDTO>()
@@ -41,6 +44,7 @@ class ChatActivity : AppCompatActivity() {
         if (intent.getParcelableArrayExtra("messages") != null) items = ArrayList(intent.getParcelableArrayExtra("messages").toList()) as ArrayList<MessageDTO>
         info = intent.getParcelableExtra("info")
         channelId = info!!.channel.id!!
+        channelName = info!!.channel.name
         userId = Prefs.get(applicationContext)
                 .getLong("id", 0)
 
@@ -93,10 +97,18 @@ class ChatActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId) {
             R.id.chat_settings -> {
-
+                var intent = Intent(applicationContext, ChannelSettingActivity::class.java)
+                intent.apply {
+                    putExtra("id", channelId)
+                    putExtra("name", channelName)
+                    putExtra("token", intent.getStringExtra("token"))
+                }
+                startActivity(intent)
                 return true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
     }
 
@@ -120,7 +132,5 @@ class ChatActivity : AppCompatActivity() {
                     Log.d("hogehoge", "completed")
                 })
     }
-
-
 
 }
