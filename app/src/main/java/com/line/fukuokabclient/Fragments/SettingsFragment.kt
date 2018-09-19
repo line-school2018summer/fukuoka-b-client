@@ -1,14 +1,19 @@
 package com.line.fukuokabclient.Fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.line.fukuokabclient.R
+import com.line.fukuokabclient.R.id.toolbar_update_profile
+import com.line.fukuokabclient.R.menu.main_settings_toolbar
 import com.line.fukuokabclient.dto.UserDTO
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -47,12 +52,21 @@ class SettingsFragment : Fragment() {
 
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
-
+    @SuppressLint("LongLogTag")
     override fun onStart() {
         super.onStart()
         my_name.setText(userName)
+//        my_name.isEnabled = false
+        my_name.setSelectAllOnFocus(false)
+        my_name.isFocusable = false
+        my_name.isFocusableInTouchMode = false
+        my_name.setTextColor(Color.parseColor("#333333"))
+        Log.d("nameEditTextEnable", my_name.isEnabled.toString())
+        Log.d("nameEditTextFocusable", my_name.isFocusable.toString())
+        Log.d("nameEditTextFocusableInTouchMode", my_name.isFocusableInTouchMode.toString())
         my_hitokoto.setText(hitokoto)
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(user: UserDTO) {

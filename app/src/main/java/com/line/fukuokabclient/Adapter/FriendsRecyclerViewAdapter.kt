@@ -56,6 +56,7 @@ class FriendsRecyclerViewAdapter(
     inner class ListViewHolder(val mView: View) : UserViewHolder(mView) {
         val mIconView: ImageView = mView.user_icon_img as ImageView
         val mContentView: TextView = mView.content
+        val mHitokotoView: TextView? = mView.hitokoto
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"
@@ -63,6 +64,7 @@ class FriendsRecyclerViewAdapter(
 
         override fun bind(user: UserDTO) {
             mContentView.text = user.name
+            mHitokotoView!!.text = user.hitokoto
             when (user.name) {
                 "ミッキー" -> mIconView.setImageResource(R.drawable.icon_mickey)
                 "ドナルド" -> mIconView.setImageResource(R.drawable.icon_donald)
