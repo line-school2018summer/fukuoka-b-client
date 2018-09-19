@@ -44,9 +44,6 @@ class ColorChangeDialogHelper(context: Context): BaseDialogHelper() {
         dialogView.findViewById<RadioButton>(R.id.radio_sora_58b2dc)
     }
 
-    val rbGofun: RadioButton by lazy {
-        dialogView.findViewById<RadioButton>(R.id.radio_gofunn_fffffb)
-    }
 
     val btnCancel: Button by lazy {
         dialogView.findViewById<Button>(R.id.dialog_color_btn_cancel)

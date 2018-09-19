@@ -33,7 +33,8 @@
                 android:layout_weight="1"
                 android:text="桜"
                 android:textAlignment="viewEnd"
-                android:layout_margin="@dimen/text_margin"/>
+                android:layout_margin="@dimen/text_margin"
+                android:buttonTint="#fedfe1"/>
 
             <RadioButton
                 android:id="@+id/radio_yamabukicya_d19826"
@@ -42,7 +43,8 @@
                 android:layout_weight="1"
                 android:text="山吹茶"
                 android:textAlignment="viewEnd"
-                android:layout_margin="@dimen/text_margin"/>
+                android:layout_margin="@dimen/text_margin"
+                android:buttonTint="#d19826"/>
 
             <RadioButton
                 android:id="@+id/radio_nae_86c166"
@@ -51,7 +53,8 @@
                 android:layout_weight="1"
                 android:text="苗"
                 android:textAlignment="viewEnd"
-                android:layout_margin="@dimen/text_margin"/>
+                android:layout_margin="@dimen/text_margin"
+                android:buttonTint="#86c166"/>
 
             <RadioButton
                 android:id="@+id/radio_aotake_00896c"
@@ -60,7 +63,8 @@
                 android:layout_weight="1"
                 android:text="青竹"
                 android:textAlignment="viewEnd"
-                android:layout_margin="@dimen/text_margin"/>
+                android:layout_margin="@dimen/text_margin"
+                android:buttonTint="#00896c"/>
 
             <RadioButton
                 android:id="@+id/radio_sora_58b2dc"
@@ -69,21 +73,14 @@
                 android:layout_weight="1"
                 android:text="空"
                 android:textAlignment="viewEnd"
-                android:layout_margin="@dimen/text_margin"/>
-
-            <RadioButton
-                android:id="@+id/radio_gofunn_fffffb"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="胡粉"
-                android:textAlignment="viewEnd"
-                android:layout_margin="@dimen/text_margin"/>
+                android:layout_margin="@dimen/text_margin"
+                android:buttonTint="#58b2dc"/>
         </RadioGroup>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/text_margin"
             android:orientation="horizontal">
 
             <Button
