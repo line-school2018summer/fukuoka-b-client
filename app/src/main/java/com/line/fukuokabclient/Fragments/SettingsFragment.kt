@@ -1,14 +1,19 @@
 package com.line.fukuokabclient.Fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.line.fukuokabclient.R
+import com.line.fukuokabclient.R.id.toolbar_update_profile
+import com.line.fukuokabclient.R.menu.main_settings_toolbar
 import com.line.fukuokabclient.dto.UserDTO
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -47,12 +52,20 @@ class SettingsFragment : Fragment() {
 
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
-
+    @SuppressLint("LongLogTag")
     override fun onStart() {
         super.onStart()
         my_name.setText(userName)
-        my_hitokoto.setText(hitokoto)
+        my_name.isEnabled = false
+        my_name.setTextColor(Color.parseColor("#555555"))
+
+        with (my_hitokoto) {
+            setTextColor(Color.parseColor("#555555"))
+            isEnabled = false
+            setText(hitokoto)
+        }
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(user: UserDTO) {

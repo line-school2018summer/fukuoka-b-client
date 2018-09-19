@@ -22,4 +22,19 @@
         android:text="username"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/hitokoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="20dp"
+        android:layout_weight="1"
+        android:autoText="false"
+        android:gravity="right"
+        android:text="ひとこと"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="#AAAAAA"
+        android:textSize="18dp" />
+
 </LinearLayout>
