@@ -12,9 +12,12 @@ import com.line.fukuokabclient.Adapter.ChatAdapter
 import com.line.fukuokabclient.Client.ChannelClient
 import com.line.fukuokabclient.Client.Response.ResponseChannelInfo
 import com.line.fukuokabclient.Utility.Prefs
+import com.line.fukuokabclient.db.ColorDataParser
+import com.line.fukuokabclient.db.DbOpenHelper
 import com.line.fukuokabclient.dto.MessageDTO
 import com.line.fukuokabclient.websocket.WebSocketChatClient
 import kotlinx.android.synthetic.main.activity_chat.*
+import org.jetbrains.anko.db.*
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
@@ -29,7 +32,7 @@ class ChatActivity : AppCompatActivity() {
     var items = ArrayList<MessageDTO>()
     var messageAdapter: ChatAdapter? = null
     var info: ResponseChannelInfo? = null
-    var userMapper: HashMap<Long, String> = HashMap()
+    var userMapper: HashMap<Long, Int> = HashMap()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +44,6 @@ class ChatActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
 
-        if (intent.getParcelableArrayExtra("messages") != null) items = ArrayList(intent.getParcelableArrayExtra("messages").toList()) as ArrayList<MessageDTO>
         info = intent.getParcelableExtra("info")
         channelId = info!!.channel.id!!
         channelName = info!!.channel.name
@@ -58,20 +60,69 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
-        this.title = if (info!!.users.size == 2) {
-            var title = ""
-            info!!.users.forEach {
-                if (it.id != userId) title = it.name
+        when(info!!.channel.type) {
+            "GROUP" -> {
+                this.title = info?.channel?.name?: "NO NAME"
             }
-            title
-        } else {
-            info?.channel?.name?: "NO NAME"
+            "PERSONAL" -> {
+                this.title = if (info!!.users.size == 2) {
+                    var title = ""
+                    info!!.users.forEach {
+                        if (it.id != userId) title = it.name
+                    }
+                    title
+                } else {
+                    info?.channel?.name?: "NO NAME"
+                }
+            }
         }
-        messageAdapter = ChatAdapter(info, items, userId)
+
+        userMapperInit()
+
+        messageAdapter = ChatAdapter(info, info!!.messages, userId, userMapper)
+    }
+
+    fun userMapperInit() {
+        var dbHelper = DbOpenHelper.getInstance(applicationContext)
+        info!!.users.forEach {
+            var color = if (it.id == userId) "#d4d4d4"  else "#bef18c"
+            dbHelper.readableDatabase.select("msgColorMap", "count(userId)")
+                    .whereArgs("(userId = {id}) and (channelId = {channelId})",
+                            "id" to it.id,
+                            "channelId" to info!!.channel.id!!).exec {
+                        if (parseSingle(IntParser) == 0) {
+                            dbHelper.writableDatabase.insert("msgColorMap",
+                                    "userId" to it.id,
+                                    "channelId" to info!!.channel.id!!,
+                                    "colorCode" to color)
+//                            "#d4d4d4"
+                        } else {
+//                            dbHelper.writableDatabase.update("msgColorMap",
+//                                    "colorCode" to color)
+//                                    .whereArgs("channelId = ${info!!.channel.id!!} and userId = ${it.id}").exec()
+                        }
+                    }
+        }
+
+        dbHelper.use {
+
+
+            select("msgColorMap", "userId", "colorCode" )
+                    .whereArgs("channelId = ${info!!.channel.id!!}")
+                    .exec {
+                        var a = parseList(ColorDataParser())
+                        a.forEach {
+                            userMapper[it.userId] = it.colorCode
+                        }
+                    }
+        }
+        Log.d("Color", "${userMapper.toString()}")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.chat_toolbar, menu)
+        when(info!!.channel.type) {
+            "GROUP" -> menuInflater.inflate(R.menu.chat_toolbar, menu)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -99,9 +150,7 @@ class ChatActivity : AppCompatActivity() {
             R.id.chat_settings -> {
                 var intent = Intent(applicationContext, ChannelSettingActivity::class.java)
                 intent.apply {
-                    putExtra("id", channelId)
-                    putExtra("name", channelName)
-                    putExtra("token", intent.getStringExtra("token"))
+                    putExtra("info", info!!)
                 }
                 startActivity(intent)
                 return true
@@ -123,7 +172,7 @@ class ChatActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Log.d("hogehoge", "${items.size}")
-                    items.add(it)
+                    info!!.messages.add(it)
                     messageAdapter!!.notifyDataSetChanged()
                     chat_recycler_view.scrollToPosition(messageAdapter!!.itemCount-1)
                 }, {

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.line.fukuokabclient.Client.Response.ResponseChannelInfo
 import com.line.fukuokabclient.R
@@ -18,12 +19,14 @@ import kotlinx.android.synthetic.main.recyclerview_chat2.view.*
 class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Long): RecyclerView.Adapter<ViewHolder>() {
     var info: ResponseChannelInfo? = null
     var userMapper: HashMap<Long, String> = HashMap()
+    var userColorMapper: HashMap<Long, Int> = HashMap()
 
-    constructor(info: ResponseChannelInfo?, messages: ArrayList<MessageDTO>, senderId: Long): this(messages, senderId) {
+    constructor(info: ResponseChannelInfo?, messages: ArrayList<MessageDTO>, senderId: Long, colorMap: HashMap<Long, Int>): this(messages, senderId) {
         this.info = info
         info?.users?.forEach {
             userMapper[it.id] = it.name
         }
+        this.userColorMapper = colorMap
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -59,12 +62,13 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
 
         override fun bind(message: MessageDTO) {
             messageText.text = message.content
-//            messageText.backgroundTintList = ColorStateList.valueOf(Color.RED)
+            messageText.backgroundTintList = ColorStateList.valueOf(userColorMapper[message.senderId]!!)
             timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
         }
     }
 
     inner class OtherMessageViewHolder(view: View): ViewHolder(view) {
+        val mIconView: ImageView = view.user_icon_img as ImageView
         private var messageText: TextView = view.other_message
         private var timeText: TextView = view.other_message_time
         private var nameText: TextView = view.other_user_name
@@ -72,7 +76,9 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
         override fun bind(message: MessageDTO) {
             messageText.text = message.content
             timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
+            messageText.backgroundTintList = ColorStateList.valueOf(userColorMapper[message.senderId]!!)
             nameText.text = userMapper[message.senderId]
+            mIconView.setImageResource(R.drawable.default_user_icon)
         }
     }
 

@@ -49,23 +49,9 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    val channelId = it.channel.id!!
-
-                    val info = it
-                    channelClient!!.getMessages(channelId)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                val intent = Intent(applicationContext, ChatActivity::class.java).apply {
-                                    putExtra("messages", it.toTypedArray())
-                                    putExtra("info", info)
-                                    putExtra("token", intent.getStringExtra("token"))
-                                }
-                                startActivity(intent)
-                            }, {
-                                Log.d("foo2", "foo2")
-                            })
-
+                    val intent = Intent(applicationContext, ChatActivity::class.java).apply {
+                        putExtra("info", it)
+                    }
                     startActivity(intent)
                 }, {
 
@@ -78,10 +64,8 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    val info = it
                     val intent = Intent(applicationContext, ChatActivity::class.java).apply {
-                        putExtra("info", info)
-                        putExtra("token", intent.getStringExtra("token"))
+                        putExtra("info", it)
                     }
                     startActivity(intent)
                 }, {
