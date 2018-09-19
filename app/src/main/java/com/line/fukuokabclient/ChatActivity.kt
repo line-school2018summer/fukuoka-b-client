@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.line.fukuokabclient.Adapter.ChatAdapter
 import com.line.fukuokabclient.Client.ChannelClient
@@ -49,12 +50,20 @@ class ChatActivity : AppCompatActivity() {
                 .getLong("id", 0)
 
         btnSendMessage.setOnClickListener {
-            if (client.isConnected() && editSendMessage.text.toString().isNotEmpty() ) {
-                val message = MessageDTO(null, userId, channelId, editSendMessage.text.toString(), null)
-                client.send("/app/chat.$channelId", message.toJson())
+            if (editSendMessage.text.toString().isNotEmpty() ) {
+                if(client.isConnected()) {
+                    val message = MessageDTO(null, userId, channelId, editSendMessage.text.toString(), null)
+                    try {
+                        client.send("/app/chat.$channelId", message.toJson())
+                    } catch (e: Exception) {
+                        Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_LONG).show()
+                    }
 
-                // メッセージ送信後は入力欄を空欄にする
-                editSendMessage.setText("")
+                    // メッセージ送信後は入力欄を空欄にする
+                    editSendMessage.setText("")
+                } else {
+                    Toast.makeText(applicationContext, R.string.error_network, Toast.LENGTH_LONG).show()
+                }
             }
         }
 

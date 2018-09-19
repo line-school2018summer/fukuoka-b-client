@@ -12,6 +12,7 @@ import android.text.InputType
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -68,7 +69,8 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
 
                     startActivity(intent)
                 }, {
-
+                    Log.d("error", it.toString())
+                    Toast.makeText(applicationContext, R.string.error_network, Toast.LENGTH_LONG).show()
                 })
         Log.d("foo", "click")
     }
@@ -90,7 +92,9 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
     }
 
     override fun onSettingsFragmentInteraction(user: UserDTO?) {
+
     }
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -167,6 +171,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 }, {
                     Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
                 })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -181,7 +186,6 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
         transaction.commit()
     }
 
-    @SuppressLint("LongLogTag")
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.toolbar_add_friend -> {
@@ -224,10 +228,14 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                         with(nameView) {
                             setTextColor(Color.parseColor("#555555"))
                             isEnabled = false
+                            isFocusable = false
+                            isFocusableInTouchMode = false
                         }
                         with (hitokotoView) {
                             setTextColor(Color.parseColor("#555555"))
                             isEnabled = false
+                            isFocusable = false
+                            isFocusableInTouchMode = false
                         }
                         isSettingEnable = false
                     }
@@ -236,14 +244,21 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                         with(nameView) {
                             setTextColor(Color.parseColor("#000000"))
                             isEnabled = true
+                            isFocusable = true
+                            isFocusableInTouchMode = true
                         }
                         with (hitokotoView) {
                             setTextColor(Color.parseColor("#000000"))
                             isEnabled = true
                             isFocusable = true
+                            isFocusableInTouchMode = true
                         }
                         try {
-                            nameView.requestFocus()
+                            with(nameView){
+                                setSelectAllOnFocus(true)
+                                requestFocus()
+                                setSelectAllOnFocus(false)
+                            }
                         } catch (e:Exception){
                             Log.e("EditTextError", e.toString())
                         }

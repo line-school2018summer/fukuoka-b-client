@@ -1,17 +1,22 @@
 package com.line.fukuokabclient.Fragments
 
 import android.annotation.SuppressLint
+import android.app.usage.UsageEvents
 import android.content.Context
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 
 import com.line.fukuokabclient.R
+import com.line.fukuokabclient.R.id.my_name
 import com.line.fukuokabclient.R.id.toolbar_update_profile
 import com.line.fukuokabclient.R.menu.main_settings_toolbar
 import com.line.fukuokabclient.dto.UserDTO
@@ -31,7 +36,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
  * create an instance of this fragment.
  *
  */
-class SettingsFragment : Fragment() {
+class SettingsFragment : Fragment()  {
     // TODO: Rename and change types of parameters
     private var userName = ""
     private var hitokoto = ""
@@ -50,9 +55,16 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         activity!!.title = getString(R.string.navigation_settings)
 
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        val v = inflater.inflate(R.layout.fragment_settings, container, false)
+
+        return v
     }
-    @SuppressLint("LongLogTag")
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
     override fun onStart() {
         super.onStart()
         my_name.setText(userName)

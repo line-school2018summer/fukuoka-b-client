@@ -13,6 +13,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="error_network">ネットワークの接続状態を確認してください。</string>
 
     <string name="preference_name">com.line.fukuokabclient.PREFERENCE</string>
 
