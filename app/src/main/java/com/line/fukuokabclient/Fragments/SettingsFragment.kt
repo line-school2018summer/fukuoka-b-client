@@ -56,15 +56,14 @@ class SettingsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         my_name.setText(userName)
-//        my_name.isEnabled = false
-        my_name.setSelectAllOnFocus(false)
-        my_name.isFocusable = false
-        my_name.isFocusableInTouchMode = false
-        my_name.setTextColor(Color.parseColor("#333333"))
-        Log.d("nameEditTextEnable", my_name.isEnabled.toString())
-        Log.d("nameEditTextFocusable", my_name.isFocusable.toString())
-        Log.d("nameEditTextFocusableInTouchMode", my_name.isFocusableInTouchMode.toString())
-        my_hitokoto.setText(hitokoto)
+        my_name.isEnabled = false
+        my_name.setTextColor(Color.parseColor("#555555"))
+
+        with (my_hitokoto) {
+            setTextColor(Color.parseColor("#555555"))
+            isEnabled = false
+            setText(hitokoto)
+        }
     }
 
 

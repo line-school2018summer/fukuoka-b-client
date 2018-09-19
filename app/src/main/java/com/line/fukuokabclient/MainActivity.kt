@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.text.InputType
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.line.fukuokabclient.Client.APIFactory
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
     private var token:String = ""
     var channelClient:ChannelClient? = null
     var userClient:UserClient? = null
+    var isSettingEnable = false
 
     var friends: List<UserDTO> = emptyList()
 
@@ -117,9 +120,11 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                         }, {
                             Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
                         })
+
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
+                isSettingEnable = false
                 userClient!!.getUserById(userId.toInt())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -196,64 +201,58 @@ class MainActivity : AppCompatActivity(), FriendsFragment.OnListFragmentInteract
                 return true
             }
             R.id.toolbar_update_profile -> {
-//                val body = HashMap<String, String>()
-//                body["id"] = userId.toString()
-//                body["name"] = my_name.text.toString()
-//                body["hitokoto"] = my_hitokoto.text.toString()
-//                userClient!!.updateProfile(body)
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe({
-//                            Toast.makeText(applicationContext, "変更が保存されました", Toast.LENGTH_LONG).show()
-//                            Log.d("myNameChanged", "SUCCESS")
-//                        }, {
-//                            Toast.makeText(applicationContext, "変更に失敗しました", Toast.LENGTH_LONG).show()
-//                            Log.d("myNameChanged", "FAILED " + it.toString())
-//
-//                        })
-                if(!my_name.isFocusableInTouchMode){
+                val nameView = findViewById<EditText>(my_name.id)
+                val hitokotoView = findViewById<EditText>(my_hitokoto.id)
+                when (isSettingEnable) {
+                    true -> {
+                        val body = HashMap<String, String>()
+                        body["id"] = userId.toString()
+                        body["name"] = nameView.text.toString()
+                        body["hitokoto"] = hitokotoView.text.toString()
+                        userClient!!.updateProfile(body)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    Toast.makeText(applicationContext, "変更が保存されました", Toast.LENGTH_LONG).show()
+                                    Log.d("myNameChanged", "SUCCESS")
+                                }, {
+                                    Toast.makeText(applicationContext, "変更に失敗しました", Toast.LENGTH_LONG).show()
+                                    Log.d("myNameChanged", "FAILED " + it.toString())
 
-//                    my_name.isEnabled = true
-                    my_name.setSelectAllOnFocus(true)
-                    my_name.isFocusableInTouchMode = true
-                    my_hitokoto.isFocusableInTouchMode = true
-                    try {
-                        my_name.requestFocus()
-                    } catch (e:Exception){
-                        Log.e("EditTextError", e.toString())
+                                })
+                        item.title = "編集"
+                        with(nameView) {
+                            setTextColor(Color.parseColor("#555555"))
+                            isEnabled = false
+                        }
+                        with (hitokotoView) {
+                            setTextColor(Color.parseColor("#555555"))
+                            isEnabled = false
+                        }
+                        isSettingEnable = false
                     }
-                    val ok = SpannableString("OK")
-                    ok.setSpan(ForegroundColorSpan(Color.rgb(124, 187, 255)), 0, 2, 0)
-                    item.title = ok
-                } else {
-                    val body = HashMap<String, String>()
-                    body["id"] = userId.toString()
-                    body["name"] = my_name.text.toString()
-                    body["hitokoto"] = my_hitokoto.text.toString()
-                    userClient!!.updateProfile(body)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                Toast.makeText(applicationContext, "変更が保存されました", Toast.LENGTH_LONG).show()
-                                Log.d("myNameChanged", "SUCCESS")
-                            }, {
-                                Toast.makeText(applicationContext, "変更に失敗しました", Toast.LENGTH_LONG).show()
-                                Log.d("myNameChanged", "FAILED " + it.toString())
+                    false -> {
 
-                            })
-//                    my_name.isEnabled = false
-                    my_name.setSelectAllOnFocus(false)
-                    my_name.isFocusableInTouchMode = false
-                    my_hitokoto.isFocusableInTouchMode = false
-                    my_name.setTextColor(Color.parseColor("#333333"))
-                    my_hitokoto.setTextColor(Color.parseColor("#333333"))
-                    item.title = "編集"
+                        with(nameView) {
+                            setTextColor(Color.parseColor("#000000"))
+                            isEnabled = true
+                        }
+                        with (hitokotoView) {
+                            setTextColor(Color.parseColor("#000000"))
+                            isEnabled = true
+                            isFocusable = true
+                        }
+                        try {
+                            nameView.requestFocus()
+                        } catch (e:Exception){
+                            Log.e("EditTextError", e.toString())
+                        }
+                        val ok = SpannableString("OK")
+                        ok.setSpan(ForegroundColorSpan(Color.rgb(124, 187, 255)), 0, 2, 0)
+                        item.title = ok
+                        isSettingEnable = true
+                    }
                 }
-                Log.d("nameEditTextEnable", my_name.isEnabled.toString())
-                Log.d("nameEditTextFocusable", my_name.isFocusable.toString())
-                Log.d("nameEditTextFocusableInTouchMode", my_name.isFocusableInTouchMode.toString())
-
-//                my_hitokoto.text
                 return true
             }
             else -> {
