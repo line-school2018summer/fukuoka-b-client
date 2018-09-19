@@ -45,6 +45,7 @@ class ChannelSettingActivity : AppCompatActivity() {
 
 
         channelClient = APIFactory.build(token).create(ChannelClient::class.java)
+        group_name.setText(channelName)
 
     }
 
