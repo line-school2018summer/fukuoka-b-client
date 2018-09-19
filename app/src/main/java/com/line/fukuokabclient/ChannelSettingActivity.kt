@@ -4,6 +4,9 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -131,36 +134,37 @@ class ChannelSettingActivity : AppCompatActivity(), ChannelSettingFragment.OnFra
 
     private fun showColorChangeDialog(user: UserDTO) {
             colorChangeDialog = ColorChangeDialogHelper(this).apply {
-                with(rbDefault) {
-                    setBackgroundColor(Color.parseColor("#bef18c"))
-                }
-
                 with(rbSakura) {
-                    setBackgroundColor(Color.parseColor("#fedfe1"))
+                    text = SpannableString(text.toString()).apply {
+                        setSpan(ForegroundColorSpan(Color.parseColor("#fedfe1")), 0, text.toString().length, 0)
+                    }
                 }
 
                 with(rbYama) {
-                    setBackgroundColor(Color.parseColor("#d19826"))
+                    text = SpannableString(text.toString()).apply {
+                        setSpan(ForegroundColorSpan(Color.parseColor("#d19826")), 0, text.toString().length, 0)
+                    }
                 }
 
                 with(rbNae) {
-                    setBackgroundColor(Color.parseColor("#86c166"))
+                    text = SpannableString(text.toString()).apply {
+                        setSpan(ForegroundColorSpan(Color.parseColor("#86c166")), 0, text.toString().length, 0)
+                    }
                 }
 
                 with(rbAotake) {
-                    setBackgroundColor(Color.parseColor("#00896c"))
+                    text = SpannableString(text.toString()).apply {
+                        setSpan(ForegroundColorSpan(Color.parseColor("#00896c")), 0, text.toString().length, 0)
+                    }
                 }
 
                 with(rbSora) {
-                    setBackgroundColor(Color.parseColor("#58b2dc"))
+                    text = SpannableString(text.toString()).apply {
+                        setSpan(ForegroundColorSpan(Color.parseColor("#58b2dc")), 0, text.toString().length, 0)
+                    }
                 }
 
-                with(rbGofun) {
-                    setBackgroundColor(Color.parseColor("#fffffb"))
-//                    text = SpannableString(text.toString()).apply {
-//                        setSpan(BackgroundColorSpan(Color.parseColor("#fffffb")), 0, text.toString().length, 0)
-//                    }
-                }
+                isBackgroundTransparent = false
 
                 btnCancelOnClick {
                     Log.d("DIALOG", "cancel")
@@ -174,7 +178,6 @@ class ChannelSettingActivity : AppCompatActivity(), ChannelSettingFragment.OnFra
                         R.id.radio_nae_86c166 -> "#86c166"
                         R.id.radio_aotake_00896c -> "#00896c"
                         R.id.radio_sora_58b2dc -> "#58b2dc"
-                        R.id.radio_gofunn_fffffb -> "#fffffb"
                         else -> "#bef18c"
                     }
                     dbHelper.use {

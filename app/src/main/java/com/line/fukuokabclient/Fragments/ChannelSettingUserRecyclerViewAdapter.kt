@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.line.fukuokabclient.R
 
@@ -43,8 +44,8 @@ class ChannelSettingUserRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.id.toString()
         holder.mContentView.text = item.name
+        holder.mIconView.setImageResource(R.drawable.default_user_icon)
 
         with(holder.mView) {
             tag = item
@@ -55,8 +56,8 @@ class ChannelSettingUserRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
         val mContentView: TextView = mView.content
+        val mIconView: ImageView = mView.user_icon_img as ImageView
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"
