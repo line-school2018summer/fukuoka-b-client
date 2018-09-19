@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.line.fukuokabclient.Client.Response.ResponseChannelInfo
 import com.line.fukuokabclient.R
@@ -67,6 +68,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
     }
 
     inner class OtherMessageViewHolder(view: View): ViewHolder(view) {
+        val mIconView: ImageView = view.user_icon_img as ImageView
         private var messageText: TextView = view.other_message
         private var timeText: TextView = view.other_message_time
         private var nameText: TextView = view.other_user_name
@@ -76,6 +78,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
             timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
             messageText.backgroundTintList = ColorStateList.valueOf(userColorMapper[message.senderId]!!)
             nameText.text = userMapper[message.senderId]
+            mIconView.setImageResource(R.drawable.default_user_icon)
         }
     }
 

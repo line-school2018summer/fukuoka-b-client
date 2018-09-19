@@ -1,19 +1,12 @@
 package com.line.fukuokabclient
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.graphics.Color
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
-import android.text.Editable
-import android.text.SpannableString
-import android.text.style.BackgroundColorSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.Toast
 import com.line.fukuokabclient.Client.APIFactory
 import com.line.fukuokabclient.Client.ChannelClient
@@ -22,13 +15,10 @@ import com.line.fukuokabclient.Dialog.ChannelNameDialogHelper
 import com.line.fukuokabclient.Dialog.ColorChangeDialogHelper
 import com.line.fukuokabclient.Fragments.ChannelSettingFragment
 import com.line.fukuokabclient.Fragments.ChannelSettingUserFragment
-import com.line.fukuokabclient.Fragments.dummy.DummyContent
 import com.line.fukuokabclient.Utility.Prefs
 import com.line.fukuokabclient.db.DbOpenHelper
 import com.line.fukuokabclient.dto.UserDTO
 import kotlinx.android.synthetic.main.activity_channel_setting.*
-import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.dialog_edit_channel_name.*
 import kotlinx.android.synthetic.main.fragment_channel_setting.*
 import org.jetbrains.anko.db.update
 import rx.android.schedulers.AndroidSchedulers
@@ -42,16 +32,6 @@ class ChannelSettingActivity : AppCompatActivity(), ChannelSettingFragment.OnFra
     override fun onFragmentInteraction(item: String) {
         when(item) {
             "item1" -> {
-//                val editDialog = Dialog(this)
-//
-//                editDialog.setContentView(R.layout.dialog_edit_channel_name)
-//                dialog_edit_channel_name_text.setText(channelName)
-//                dialog_edit_channel_name_btn_cancel.setOnClickListener { editDialog.cancel() }
-//                dialog_edit_channel_name_btn_ok.setOnClickListener {
-//                    updateChannelName(dialog_edit_channel_name_text.text.toString())
-//                    editDialog.cancel()
-//                }
-//                editDialog.show()
                 showChannelNameDialog()
             }
             "item2" -> {
@@ -150,7 +130,6 @@ class ChannelSettingActivity : AppCompatActivity(), ChannelSettingFragment.OnFra
     }
 
     private fun showColorChangeDialog(user: UserDTO) {
-        if (colorChangeDialog == null) {
             colorChangeDialog = ColorChangeDialogHelper(this).apply {
                 with(rbDefault) {
                     setBackgroundColor(Color.parseColor("#bef18c"))
@@ -170,16 +149,10 @@ class ChannelSettingActivity : AppCompatActivity(), ChannelSettingFragment.OnFra
 
                 with(rbAotake) {
                     setBackgroundColor(Color.parseColor("#00896c"))
-//                    text = SpannableString(text.toString()).apply {
-//                        setSpan(BackgroundColorSpan(Color.parseColor("#00896c")), 0, text.toString().length, 0)
-//                    }
                 }
 
                 with(rbSora) {
                     setBackgroundColor(Color.parseColor("#58b2dc"))
-//                    text = SpannableString(text.toString()).apply {
-//                        setSpan(BackgroundColorSpan(Color.parseColor("#58b2dc")), 0, text.toString().length, 0)
-//                    }
                 }
 
                 with(rbGofun) {
@@ -213,6 +186,5 @@ class ChannelSettingActivity : AppCompatActivity(), ChannelSettingFragment.OnFra
             }.create()
 
             colorChangeDialog?.show()
-        }
     }
 }

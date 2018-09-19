@@ -7,6 +7,16 @@
     android:paddingTop="5dp"
     android:paddingBottom="5dp">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/user_icon_img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="24dp"
+        android:src="#d4d4d4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/other_user_name"
         android:text="John Doe"
@@ -16,14 +26,14 @@
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="5dp"
-        android:paddingLeft="10dp"/>
+        android:paddingLeft="40dp"/>
 
     <TextView
         android:id="@+id/other_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/opponent_message_balloon"
         android:elevation="5dp"
