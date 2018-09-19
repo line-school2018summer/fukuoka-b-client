@@ -26,4 +26,9 @@ interface ChannelClient {
 
     @GET("chat/{channelId}/info")
     fun getChannelInfo(@Path("channelId") channelId: Long): Observable<ResponseChannelInfo>
+
+    @Headers("Accept: application/json",
+            "Content-type: application/json")
+    @POST("chat/{channelId}/update/name")
+    fun updateChannelName(@Path("channelId")channelId: Long, @Body body: HashMap<String, String>): Observable<Void>
 }

@@ -39,13 +39,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         　
+
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" />
         <activity
             android:name=".GroupSelectUsersActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ChannelSettingActivity"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
