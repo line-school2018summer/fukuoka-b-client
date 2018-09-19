@@ -60,15 +60,23 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
-        this.title = if (info!!.users.size == 2) {
-            var title = ""
-            info!!.users.forEach {
-                if (it.id != userId) title = it.name
+        when(info!!.channel.type) {
+            "GROUP" -> {
+                this.title = info?.channel?.name?: "NO NAME"
             }
-            title
-        } else {
-            info?.channel?.name?: "NO NAME"
+            "PERSONAL" -> {
+                this.title = if (info!!.users.size == 2) {
+                    var title = ""
+                    info!!.users.forEach {
+                        if (it.id != userId) title = it.name
+                    }
+                    title
+                } else {
+                    info?.channel?.name?: "NO NAME"
+                }
+            }
         }
+
         userMapperInit()
 
         messageAdapter = ChatAdapter(info, info!!.messages, userId, userMapper)
@@ -77,6 +85,7 @@ class ChatActivity : AppCompatActivity() {
     fun userMapperInit() {
         var dbHelper = DbOpenHelper.getInstance(applicationContext)
         info!!.users.forEach {
+            var color = if (it.id == userId) "#d4d4d4"  else "#bef18c"
             dbHelper.readableDatabase.select("msgColorMap", "count(userId)")
                     .whereArgs("(userId = {id}) and (channelId = {channelId})",
                             "id" to it.id,
@@ -85,15 +94,18 @@ class ChatActivity : AppCompatActivity() {
                             dbHelper.writableDatabase.insert("msgColorMap",
                                     "userId" to it.id,
                                     "channelId" to info!!.channel.id!!,
-                                    "colorCode" to "#CE93D8")
+                                    "colorCode" to color)
 //                            "#d4d4d4"
+                        } else {
+//                            dbHelper.writableDatabase.update("msgColorMap",
+//                                    "colorCode" to color)
+//                                    .whereArgs("channelId = ${info!!.channel.id!!} and userId = ${it.id}").exec()
                         }
                     }
         }
+
         dbHelper.use {
-//            update("msgColorMap",
-//                    "colorCode" to "#d4d4d4")
-//                    .whereArgs("channelId = ${info!!.channel.id!!}").exec()
+
 
             select("msgColorMap", "userId", "colorCode" )
                     .whereArgs("channelId = ${info!!.channel.id!!}")
@@ -104,6 +116,7 @@ class ChatActivity : AppCompatActivity() {
                         }
                     }
         }
+        Log.d("Color", "${userMapper.toString()}")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -137,8 +150,7 @@ class ChatActivity : AppCompatActivity() {
             R.id.chat_settings -> {
                 var intent = Intent(applicationContext, ChannelSettingActivity::class.java)
                 intent.apply {
-                    putExtra("id", channelId)
-                    putExtra("name", channelName)
+                    putExtra("info", info!!)
                 }
                 startActivity(intent)
                 return true

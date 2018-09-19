@@ -13,28 +13,19 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/CustomActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 
-    <android.support.design.widget.TextInputLayout
+    <FrameLayout
+        android:id="@+id/channel_setting_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="100dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/group_setting_toolbar">
+        android:layout_weight="1"
+        tools:layout_editor_absoluteY="160dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_constraintTop_toBottomOf="@id/group_setting_toolbar">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/group_name"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="24dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="グループ名"
-            android:inputType="textNoSuggestions" />
 
-    </android.support.design.widget.TextInputLayout>
-
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>

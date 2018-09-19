@@ -74,6 +74,7 @@ class ChatAdapter(private val messages: ArrayList<MessageDTO>, val senderId: Lon
         override fun bind(message: MessageDTO) {
             messageText.text = message.content
             timeText.text = DateUtils.fromMillisToTimeString(message.createdAt!!)
+            messageText.backgroundTintList = ColorStateList.valueOf(userColorMapper[message.senderId]!!)
             nameText.text = userMapper[message.senderId]
         }
     }

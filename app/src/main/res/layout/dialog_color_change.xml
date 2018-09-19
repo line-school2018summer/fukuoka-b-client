@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="30dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/text_margin">
+
+        <RadioGroup
+            android:id="@+id/dialog_color_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin">
+
+            <RadioButton
+                android:id="@+id/radio_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="LINE"
+                android:textAlignment="viewEnd"
+                android:layout_margin="@dimen/text_margin"/>
+
+            <RadioButton
+                android:id="@+id/radio_sakura_fedfe1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="桜"
+                android:textAlignment="viewEnd"
+                android:layout_margin="@dimen/text_margin"/>
+
+            <RadioButton
+                android:id="@+id/radio_yamabukicya_d19826"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="山吹茶"
+                android:textAlignment="viewEnd"
+                android:layout_margin="@dimen/text_margin"/>
+
+            <RadioButton
+                android:id="@+id/radio_nae_86c166"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="苗"
+                android:textAlignment="viewEnd"
+                android:layout_margin="@dimen/text_margin"/>
+
+            <RadioButton
+                android:id="@+id/radio_aotake_00896c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="青竹"
+                android:textAlignment="viewEnd"
+                android:layout_margin="@dimen/text_margin"/>
+
+            <RadioButton
+                android:id="@+id/radio_sora_58b2dc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="空"
+                android:textAlignment="viewEnd"
+                android:layout_margin="@dimen/text_margin"/>
+
+            <RadioButton
+                android:id="@+id/radio_gofunn_fffffb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="胡粉"
+                android:textAlignment="viewEnd"
+                android:layout_margin="@dimen/text_margin"/>
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/dialog_color_btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/text_margin"
+                android:layout_weight="1"
+                android:text="Cancel"
+                android:textColor="@android:color/holo_red_light" />
+
+            <Button
+                android:id="@+id/dialog_color_btn_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/text_margin"
+                android:layout_weight="1"
+                android:text="Save" />
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
